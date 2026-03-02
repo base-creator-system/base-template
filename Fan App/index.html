@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<!-- BASE V1: FAN APP IDENTITY (INSTALL + SHARE) -->
 <title>DJ TEST 15</title>
 <meta name="apple-mobile-web-app-title" content="DJ TEST 15">
 <meta name="application-name" content="DJ TEST 15">
@@ -13,12 +12,13 @@
 <meta property="og:image" content="icons/icon-512.png">
 <link rel="apple-touch-icon" href="icons/icon-192-v8.png">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192-v8.png">
 
 <style>
 body{
   margin:0;
   font-family:system-ui;
-  background:#0b0b0f; /* default fallback */
+  background:#0b0b0f;
   color:white;
   transition:background-color 0.3s ease;
 }
@@ -30,8 +30,6 @@ header{
   justify-content:space-between;
   gap:12px;
 }
-
-/* UNIVERSAL LOGO (V1) */
 #logoWrap{
   width:100%;
   text-align:center;
@@ -44,7 +42,6 @@ header{
   height:auto;
   object-fit:contain;
 }
-
 section{ padding:16px; }
 .badge{
   padding:6px 10px;
@@ -69,8 +66,46 @@ a.btn{
   text-decoration:none;
   background:#0a0a0a;
 }
+.media-section{
+  margin-top:20px;
+  margin-bottom:20px;
+}
+.media-card{
+  background:#0a0a0a;
+  border:1px solid #222;
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.media-card img{
+  width:100%;
+  border-radius:8px;
+  margin-bottom:8px;
+}
+.media-title{
+  font-weight:600;
+  margin-bottom:4px;
+}
+.media-desc{
+  font-size:14px;
+  opacity:0.8;
+  margin-bottom:10px;
+}
+.media-btn{
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid #333;
+  background:#111;
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+}
+.media-locked{
+  opacity:0.6;
+  cursor:not-allowed;
+}
 </style>
-  <link rel="icon" href="icons/icon-192-v8.png">
 </head>
 
 <body>
@@ -85,6 +120,10 @@ a.btn{
 
 <section>
   <p id="bio">Bio goes here</p>
+
+  <!-- MEDIA GATEWAY -->
+  <div id="mediaSection" class="media-section"></div>
+
   <div class="links" id="links"></div>
 </section>
 
@@ -106,6 +145,8 @@ function applyState(d){
 
   const liveOn = d.isLive === true;
   document.getElementById("live").textContent = liveOn ? "LIVE" : "OFFLINE";
+
+  renderMedia(d);
 
   const linksEl = document.getElementById("links");
   linksEl.innerHTML = "";
@@ -132,7 +173,6 @@ function applyState(d){
     linksEl.prepend(a);
   }
 
-  // Connect Button (external, no storage)
   if (d.contactEmail && typeof d.contactEmail === "string") {
     const label = (typeof d.contactLabel === "string" && d.contactLabel.trim())
       ? d.contactLabel.trim()
@@ -145,13 +185,71 @@ function applyState(d){
     linksEl.appendChild(a);
   }
 
-  // ===== V1 UNIVERSAL LOGO (SHOWS INSIDE APP) =====
-  // Always render the current icon-512.png and bust cache so changes appear immediately.
   const logo = document.getElementById("logo");
   if (logo) {
     logo.src = "./icons/icon-512.png?v=" + Date.now();
     logo.style.display = "block";
   }
+}
+
+function renderMedia(d){
+  const container = document.getElementById("mediaSection");
+  container.innerHTML = "";
+
+  if (!d.mediaGateway || !d.mediaGateway.enabled) return;
+
+  const collections = Array.isArray(d.mediaGateway.collections)
+    ? d.mediaGateway.collections
+    : [];
+
+  collections.forEach(collection => {
+    if (!collection.items || !collection.items.length) return;
+
+    const heading = document.createElement("h3");
+    heading.textContent = collection.title;
+    heading.style.marginBottom = "10px";
+    container.appendChild(heading);
+
+    collection.items.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "media-card";
+
+      if (item.thumbnail) {
+        const img = document.createElement("img");
+        img.src = item.thumbnail;
+        card.appendChild(img);
+      }
+
+      const title = document.createElement("div");
+      title.className = "media-title";
+      title.textContent = item.title || "";
+      card.appendChild(title);
+
+      if (item.description) {
+        const desc = document.createElement("div");
+        desc.className = "media-desc";
+        desc.textContent = item.description;
+        card.appendChild(desc);
+      }
+
+      if (item.access === "public" && item.url) {
+        const btn = document.createElement("a");
+        btn.className = "media-btn";
+        btn.href = item.url;
+        btn.target = "_blank";
+        btn.rel = "noopener";
+        btn.textContent = "Open";
+        card.appendChild(btn);
+      } else {
+        const locked = document.createElement("div");
+        locked.className = "media-btn media-locked";
+        locked.textContent = "Locked";
+        card.appendChild(locked);
+      }
+
+      container.appendChild(card);
+    });
+  });
 }
 
 async function fetchState(){
