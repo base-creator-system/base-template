@@ -82,11 +82,11 @@
     margin-bottom:6px;
   }
 
-  input, textarea, button{
+  input, textarea, button, select{
     font: inherit;
   }
 
-  input, textarea{
+  input, textarea, select{
     width:100%;
     box-sizing:border-box;
     border-radius:14px;
@@ -183,6 +183,44 @@
     height:1px;
     opacity:0;
     pointer-events:none;
+  }
+
+  /* ===== Media Gateway UI ===== */
+  .toggleRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .mediaList{
+    margin-top:12px;
+  }
+  .mediaItemRow{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px;
+    border:1px solid #222;
+    border-radius:14px;
+    margin-top:10px;
+    background:#050505;
+  }
+  .mediaMeta{
+    flex:1;
+    min-width:0;
+  }
+  .mediaTitle{
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .mediaSub{
+    opacity:0.8;
+    font-size:12px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
   }
 </style>
 </head>
@@ -285,6 +323,70 @@
       </div>
     </div>
 
+    <!-- ✅ MEDIA GATEWAY (VISIBLE CONTROL) -->
+    <div class="card">
+      <h3 style="margin:0 0 10px 0;">Media Gateway</h3>
+
+      <div class="toggleRow">
+        <div class="tiny">Controls what fans can access (public vs paid).</div>
+        <label style="display:flex;align-items:center;gap:10px;margin:0;">
+          <span class="tiny">Enabled</span>
+          <input id="mediaEnabled" type="checkbox" style="width:auto;height:auto;">
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div class="col">
+          <label for="mediaCollectionTitle">Collection Title</label>
+          <input id="mediaCollectionTitle" type="text" placeholder="Latest">
+          <div class="tiny">V1: one collection (clean). Multi-collection later.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div class="col">
+          <label for="mediaTitle">Item Title</label>
+          <input id="mediaTitle" type="text" placeholder="Clip title">
+        </div>
+        <div class="col">
+          <label for="mediaAccess">Access</label>
+          <select id="mediaAccess">
+            <option value="public">public</option>
+            <option value="paid">paid</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div class="col">
+          <label for="mediaUrl">URL (public only)</label>
+          <input id="mediaUrl" type="text" placeholder="https://...">
+          <div class="tiny">If Access=paid → URL is stored empty so nothing leaks.</div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div class="col">
+          <label for="mediaThumb">Thumbnail URL (optional)</label>
+          <input id="mediaThumb" type="text" placeholder="https://.../thumb.jpg">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <div class="col">
+          <label for="mediaDesc">Description (optional)</label>
+          <input id="mediaDesc" type="text" placeholder="Short description">
+        </div>
+      </div>
+
+      <div class="btnRow">
+        <button id="btnAddMedia" type="button">Add Item</button>
+        <button id="btnClearMedia" type="button" class="danger">Clear Media</button>
+      </div>
+
+      <div id="mediaList" class="mediaList"></div>
+    </div>
+
     <div class="card">
       <h3 style="margin:0 0 10px 0;">App Icon</h3>
 
@@ -327,16 +429,11 @@
   </div>
 
 <script>
-/* BASE Creator Dashboard — V1 Publisher (Tier 0 Clean)
+/* BASE Creator Dashboard — V1 Publisher (Tier 0 + Media Gateway UI)
    - Publishes Fan App/content.json via GitHub API
-   - Restores Pilot icon overwrite behavior (via versioned filenames)
-   - Universal identity fix:
-       * Updates Fan App/manifest.json name + short_name
-       * Updates Fan App/index.html <title> + apple-mobile-web-app-title
-       * Updates apple-touch-icon to match versioned icon
-   - Safely bumps version for icon refresh
-   - NO UI changes
-   - CRITICAL FIX: Preserve unknown keys in content.json (e.g., mediaGateway) by merging instead of overwriting.
+   - Identity sync remains as-is
+   - CRITICAL: merge-safe publish so unknown keys are preserved
+   - Adds visible Media Gateway controls on dashboard (no more invisible-only changes)
 */
 (() => {
 
@@ -375,6 +472,18 @@
     contactEmail: $("contactEmail"),
     contactLabel: $("contactLabel"),
 
+    // Media Gateway controls
+    mediaEnabled: $("mediaEnabled"),
+    mediaCollectionTitle: $("mediaCollectionTitle"),
+    mediaTitle: $("mediaTitle"),
+    mediaAccess: $("mediaAccess"),
+    mediaUrl: $("mediaUrl"),
+    mediaThumb: $("mediaThumb"),
+    mediaDesc: $("mediaDesc"),
+    btnAddMedia: $("btnAddMedia"),
+    btnClearMedia: $("btnClearMedia"),
+    mediaList: $("mediaList"),
+
     appIconFile: $("appIconFile"),
     btnUpdateIcon: $("btnUpdateIcon"),
     appIconStatus: $("appIconStatus"),
@@ -391,7 +500,15 @@
 
   const LS_TOKEN = "base_creator_token_v1";
   let lastRemoteSha = null;
+
+  // Links state (Tier 0)
   let linkState = [];
+
+  // Media state (V1: 1 collection)
+  let mediaHydrated = false;  // becomes true after load
+  let mediaTouched = false;   // becomes true after any media UI change
+  let mediaItems = [];        // items array
+  let mediaEnabledState = false;
 
   function log(line) {
     const stamp = new Date().toLocaleString();
@@ -451,7 +568,85 @@
     syncLinksToEngine();
   }
 
-  function buildDraft() {
+  function renderMediaList() {
+    if (!el.mediaList) return;
+    el.mediaList.innerHTML = "";
+
+    const meta = document.createElement("div");
+    meta.className = "tiny";
+    meta.textContent = `Items: ${mediaItems.length}`;
+    el.mediaList.appendChild(meta);
+
+    mediaItems.forEach((item, idx) => {
+      const row = document.createElement("div");
+      row.className = "mediaItemRow";
+
+      const left = document.createElement("div");
+      left.className = "mediaMeta";
+
+      const t = document.createElement("div");
+      t.className = "mediaTitle";
+      t.textContent = item.title || "(untitled)";
+
+      const sub = document.createElement("div");
+      sub.className = "mediaSub";
+      sub.textContent = `${item.access || "public"} — ${item.url ? item.url : "(no url)"}`;
+
+      left.appendChild(t);
+      left.appendChild(sub);
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "Remove";
+      remove.onclick = () => {
+        mediaItems.splice(idx, 1);
+        mediaTouched = true;
+        renderMediaList();
+        enablePublishIfReady();
+      };
+
+      row.appendChild(left);
+      row.appendChild(remove);
+      el.mediaList.appendChild(row);
+    });
+  }
+
+  function hydrateMediaGateway(current) {
+    const mg = current && typeof current === "object" ? current.mediaGateway : null;
+
+    mediaHydrated = true;
+
+    if (!mg || typeof mg !== "object") {
+      mediaEnabledState = false;
+      mediaItems = [];
+      if (el.mediaEnabled) el.mediaEnabled.checked = false;
+      if (el.mediaCollectionTitle) el.mediaCollectionTitle.value = "Latest";
+      renderMediaList();
+      return;
+    }
+
+    mediaEnabledState = mg.enabled === true;
+    if (el.mediaEnabled) el.mediaEnabled.checked = mediaEnabledState;
+
+    const collections = Array.isArray(mg.collections) ? mg.collections : [];
+    const first = (collections[0] && typeof collections[0] === "object") ? collections[0] : {};
+
+    if (el.mediaCollectionTitle) el.mediaCollectionTitle.value = String(first.title || "Latest");
+
+    const items = Array.isArray(first.items) ? first.items : [];
+    mediaItems = items.map((x) => ({
+      id: x?.id || `item-${Math.random().toString(16).slice(2)}`,
+      title: String(x?.title || ""),
+      description: String(x?.description || ""),
+      thumbnail: String(x?.thumbnail || ""),
+      url: String(x?.url || ""),
+      access: x?.access === "paid" ? "paid" : "public"
+    }));
+
+    renderMediaList();
+  }
+
+  function buildDraftTier0() {
     const draft = {
       name: (el.name?.value || "").trim(),
       bio: (el.bio?.value || "").trim(),
@@ -471,35 +666,32 @@
     return draft;
   }
 
-  // CRITICAL: apply Tier-0 fields onto existing JSON while preserving everything else.
-  // This preserves mediaGateway + any future tier blocks.
-  function mergeTier0IntoExisting(existing, draft) {
-    const base = (existing && typeof existing === "object" && !Array.isArray(existing)) ? existing : {};
+  function buildDraftMediaGatewayIfPresent() {
+    // Only write mediaGateway if we loaded it OR user touched it.
+    // That prevents the dashboard from accidentally adding a new block unless it was part of the current state or you edited it.
+    if (!(mediaHydrated || mediaTouched)) return null;
 
-    // name
-    if (Object.prototype.hasOwnProperty.call(draft, "name")) base.name = draft.name;
-    else delete base.name;
+    const enabled = el.mediaEnabled?.checked === true;
+    const title = (el.mediaCollectionTitle?.value || "Latest").trim() || "Latest";
 
-    // bio
-    if (Object.prototype.hasOwnProperty.call(draft, "bio")) base.bio = draft.bio;
-    else delete base.bio;
+    const items = mediaItems.map((it) => ({
+      id: it.id || `item-${Math.random().toString(16).slice(2)}`,
+      title: (it.title || "").trim(),
+      description: (it.description || "").trim(),
+      thumbnail: (it.thumbnail || "").trim(),
+      // HARD RULE: paid never stores url
+      url: (it.access === "paid") ? "" : (it.url || "").trim(),
+      access: (it.access === "paid") ? "paid" : "public"
+    }));
 
-    // links + backgroundColor always written
-    base.links = Array.isArray(draft.links) ? draft.links : [];
-    base.backgroundColor = draft.backgroundColor || "#000000";
-
-    // contactEmail/contactLabel: set if provided, else remove
-    if (Object.prototype.hasOwnProperty.call(draft, "contactEmail")) base.contactEmail = draft.contactEmail;
-    else delete base.contactEmail;
-
-    if (Object.prototype.hasOwnProperty.call(draft, "contactLabel")) base.contactLabel = draft.contactLabel;
-    else delete base.contactLabel;
-
-    return base;
+    return {
+      enabled,
+      collections: [{ title, items }]
+    };
   }
 
   function refreshPreview() {
-    const draft = buildDraft();
+    const draft = buildDraftTier0();
     if (el.previewName) el.previewName.textContent = draft.name || "—";
     if (el.previewBio) el.previewBio.textContent = draft.bio || "—";
   }
@@ -561,11 +753,6 @@
     return await res.json();
   }
 
-  async function ghGetFileSha(token, path) {
-    const data = await ghGetFileMeta(token, path);
-    return data.sha;
-  }
-
   async function ghPutFile(token, path, sha, contentBase64, message) {
     const api =
       `https://api.github.com/repos/${OWNER}/${REPO}/contents/${ghEncodePath(path)}`;
@@ -590,8 +777,8 @@
 
   async function ghUpsertFile(token, path, contentBase64, message) {
     try {
-      const sha = await ghGetFileSha(token, path);
-      return await ghPutFile(token, path, sha, contentBase64, message);
+      const meta = await ghGetFileMeta(token, path);
+      return await ghPutFile(token, path, meta.sha, contentBase64, message);
     } catch (e) {
       if (String(e.message || "").includes("(404)")) {
         return await ghPutFile(token, path, null, contentBase64, message);
@@ -608,8 +795,8 @@
     return await res.json();
   }
 
-  function safeAppNameFromDraft(draft) {
-    const n = String(draft?.name || "").trim();
+  function safeAppNameFromDraft(draftObj) {
+    const n = String(draftObj?.name || "").trim();
     return n || "Creator Home";
   }
 
@@ -630,6 +817,20 @@
     const target = icons.find(i => String(i?.sizes || "") === size) || icons[0];
     const src = String(target?.src || "icons/icon-192.png");
     return src;
+  }
+
+  function escapeHtml(s) {
+    return String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+  }
+  function escapeAttr(s) {
+    return String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll(`"`, "&quot;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
 
   function updateFanIndexHtmlIdentity(htmlText, appName, appleTouchHref) {
@@ -683,20 +884,6 @@
     return html;
   }
 
-  function escapeHtml(s) {
-    return String(s || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-  }
-  function escapeAttr(s) {
-    return String(s || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll(`"`, "&quot;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-  }
-
   function bumpManifestVersionAndIconPaths(manifestObj) {
     const currentStart = String(manifestObj.start_url || "./?v=1");
     const m = currentStart.match(/v=(\d+)/);
@@ -711,6 +898,34 @@
 
     return next;
   }
+
+  // Merge Tier0 fields into existing object; preserve everything else.
+  function mergeTier0IntoExisting(existing, draftTier0) {
+    const base = (existing && typeof existing === "object" && !Array.isArray(existing)) ? existing : {};
+
+    // name
+    if (Object.prototype.hasOwnProperty.call(draftTier0, "name")) base.name = draftTier0.name;
+    else delete base.name;
+
+    // bio
+    if (Object.prototype.hasOwnProperty.call(draftTier0, "bio")) base.bio = draftTier0.bio;
+    else delete base.bio;
+
+    // links + backgroundColor always written
+    base.links = Array.isArray(draftTier0.links) ? draftTier0.links : [];
+    base.backgroundColor = draftTier0.backgroundColor || "#000000";
+
+    // contactEmail/contactLabel
+    if (Object.prototype.hasOwnProperty.call(draftTier0, "contactEmail")) base.contactEmail = draftTier0.contactEmail;
+    else delete base.contactEmail;
+
+    if (Object.prototype.hasOwnProperty.call(draftTier0, "contactLabel")) base.contactLabel = draftTier0.contactLabel;
+    else delete base.contactLabel;
+
+    return base;
+  }
+
+  // ===== Events =====
 
   el.token?.addEventListener("input", () => {
     const t = (el.token.value || "").trim();
@@ -756,6 +971,53 @@
     enablePublishIfReady();
   });
 
+  // Media UI touches
+  el.mediaEnabled?.addEventListener("change", () => {
+    mediaTouched = true;
+    mediaEnabledState = el.mediaEnabled.checked === true;
+    enablePublishIfReady();
+  });
+  el.mediaCollectionTitle?.addEventListener("input", () => {
+    mediaTouched = true;
+    enablePublishIfReady();
+  });
+
+  el.btnAddMedia?.addEventListener("click", () => {
+    const title = (el.mediaTitle?.value || "").trim();
+    const access = (el.mediaAccess?.value === "paid") ? "paid" : "public";
+    const url = (el.mediaUrl?.value || "").trim();
+    const thumb = (el.mediaThumb?.value || "").trim();
+    const desc = (el.mediaDesc?.value || "").trim();
+
+    if (!title) return;
+
+    mediaItems.push({
+      id: `item-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      title,
+      description: desc,
+      thumbnail: thumb,
+      url: access === "paid" ? "" : url,
+      access
+    });
+
+    mediaTouched = true;
+
+    if (el.mediaTitle) el.mediaTitle.value = "";
+    if (el.mediaUrl) el.mediaUrl.value = "";
+    if (el.mediaThumb) el.mediaThumb.value = "";
+    if (el.mediaDesc) el.mediaDesc.value = "";
+
+    renderMediaList();
+    enablePublishIfReady();
+  });
+
+  el.btnClearMedia?.addEventListener("click", () => {
+    mediaItems = [];
+    mediaTouched = true;
+    renderMediaList();
+    enablePublishIfReady();
+  });
+
   el.appIconFile?.addEventListener("change", () => {
     const file = el.appIconFile?.files?.[0];
     if (!file || !el.appIconPreview) return;
@@ -778,10 +1040,14 @@
       if (el.contactEmail) el.contactEmail.value = current?.contactEmail || "";
       if (el.contactLabel) el.contactLabel.value = current?.contactLabel || "";
 
+      // ✅ hydrate mediaGateway into visible UI
+      hydrateMediaGateway(current);
+
       const token = (el.token?.value || localStorage.getItem(LS_TOKEN) || "").trim();
       if (token) {
         try {
-          lastRemoteSha = await ghGetFileSha(token, TARGET_PATH);
+          const meta = await ghGetFileMeta(token, TARGET_PATH);
+          lastRemoteSha = meta.sha;
           if (el.lastSha) el.lastSha.textContent = `sha: ${lastRemoteSha}`;
         } catch (shaErr) {
           lastRemoteSha = null;
@@ -800,11 +1066,12 @@
     }
   });
 
+  // ✅ MERGE-SAFE PUBLISH + includes mediaGateway if hydrated/touched
   el.btnPublish?.addEventListener("click", async () => {
     try {
       const token = requireToken();
 
-      // Get current file meta (sha + content) so we can MERGE and preserve unknown keys.
+      // Get file meta including content so we can merge
       const meta = await ghGetFileMeta(token, TARGET_PATH);
       lastRemoteSha = meta.sha;
       if (el.lastSha) el.lastSha.textContent = `sha: ${lastRemoteSha}`;
@@ -815,13 +1082,16 @@
         const parsed = JSON.parse(existingText);
         if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) existingObj = parsed;
       } catch (parseErr) {
-        // If existing JSON is invalid, we still publish Tier 0 draft cleanly.
         existingObj = {};
-        log(`Warning: existing content.json parse failed, publishing Tier 0 only. (${parseErr.message})`);
+        log(`Warning: existing content.json parse failed, publishing Tier0/media clean. (${parseErr.message})`);
       }
 
-      const draft = buildDraft();
-      const merged = mergeTier0IntoExisting(existingObj, draft);
+      const draftTier0 = buildDraftTier0();
+      const merged = mergeTier0IntoExisting(existingObj, draftTier0);
+
+      // mediaGateway attach (only if present/hydrated/touched)
+      const mg = buildDraftMediaGatewayIfPresent();
+      if (mg) merged.mediaGateway = mg;
 
       const jsonText = JSON.stringify(merged, null, 2);
 
@@ -837,7 +1107,6 @@
         if (el.lastSha) el.lastSha.textContent = `sha: ${result.content.sha}`;
       }
 
-      // Identity sync should use merged (final truth), not draft.
       const appName = safeAppNameFromDraft(merged);
 
       try {
@@ -897,7 +1166,7 @@
       const mfText = fromBase64Utf8(mf.content || "");
       const mfJson = JSON.parse(mfText);
 
-      const draft = buildDraft();
+      const draft = buildDraftTier0();
       const appName = safeAppNameFromDraft(draft);
       ensureManifestIdentity(mfJson, appName);
 
@@ -950,6 +1219,7 @@
 
     if (el.backgroundColor) el.backgroundColor.value = "#000000";
     hydrateLinks([]);
+    renderMediaList();
     refreshPreview();
     enablePublishIfReady();
     setPill("warn", "STATUS: ready");
