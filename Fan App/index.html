@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>DJ TEST 18</title>
+<title>DJ TEST 16</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
@@ -96,9 +96,7 @@ color:var(--muted);
 font-size:13px;
 }
 
-.hidden{
-display:none!important;
-}
+.hidden{display:none!important}
 
 /* LINKS */
 
@@ -132,8 +130,6 @@ color:var(--muted);
 font-size:12px;
 }
 
-/* PILLS */
-
 .pill{
 flex:0 0 auto;
 padding:8px 16px;
@@ -143,8 +139,6 @@ color:#fff;
 font-size:12px;
 font-weight:600;
 }
-
-/* BUTTON */
 
 .btn{
 display:inline-flex;
@@ -261,8 +255,8 @@ background:rgba(255,255,255,0.10);
 
 </style>
 
-<meta name="apple-mobile-web-app-title" content="DJ TEST 18">
-<meta name="application-name" content="DJ TEST 18">
+<meta name="apple-mobile-web-app-title" content="DJ TEST 16">
+<meta name="application-name" content="DJ TEST 16">
 <link rel="icon" href="icons/icon-192-v8.png">
 
 </head>
@@ -315,15 +309,40 @@ background:rgba(255,255,255,0.10);
 const CONTENT_URL="./content.json"
 const POLL_INTERVAL=15000
 
-function normalizeDropbox(url){
+/* SAFE URL */
 
-if(!url) return url
+function safeURL(url){
+
+if(!url) return ""
+
+try{
+
+const u=new URL(url)
+
+if(u.protocol==="http:"||u.protocol==="https:"||u.protocol==="mailto:")
+return u.href
+
+}catch(e){}
+
+return ""
+
+}
+
+/* NORMALIZE STORAGE LINKS */
+
+function normalizeURL(url){
+
+if(!url) return ""
 
 if(url.includes("dropbox.com")){
-return url
+url=url
 .replace("www.dropbox.com","dl.dropboxusercontent.com")
 .replace("?dl=0","")
 .replace("&dl=0","")
+}
+
+if(url.includes("drive.google.com")){
+url=url.replace("/view","/preview")
 }
 
 return url
@@ -388,11 +407,13 @@ const links=Array.isArray(d.links)?d.links:[]
 
 links.forEach(item=>{
 
-if(!item.url)return
+const url=safeURL(item.url)
+
+if(!url)return
 
 const a=document.createElement("a")
 a.className="row"
-a.href=item.url
+a.href=url
 a.target="_blank"
 a.rel="noopener"
 
@@ -405,7 +426,7 @@ label.textContent=item.label||"Link"
 
 const hint=document.createElement("div")
 hint.className="hint"
-hint.textContent=item.url.replace(/^https?:\/\//,"")
+hint.textContent=url.replace(/^https?:\/\//,"")
 
 left.appendChild(label)
 left.appendChild(hint)
@@ -430,11 +451,9 @@ container.innerHTML=""
 
 if(!d.mediaGateway||!d.mediaGateway.enabled)return
 
-const collections=Array.isArray(d.mediaGateway.collections)?d.mediaGateway.collections:[]
+const collections=d.mediaGateway.collections||[]
 
 collections.forEach(collection=>{
-
-if(!collection.items)return
 
 const title=document.createElement("div")
 title.className="section-title"
@@ -453,14 +472,13 @@ const thumb=document.createElement("div")
 thumb.className="media-thumb"
 
 const img=document.createElement("img")
-img.src=normalizeDropbox(item.thumbnail)
+
+img.src=normalizeURL(item.thumbnail)
 
 img.onload=()=>{
 thumb.appendChild(img)
 card.insertBefore(thumb,card.firstChild)
 }
-
-img.onerror=()=>{}
 
 }
 
@@ -484,7 +502,7 @@ if(item.access==="public"&&item.url){
 
 const btn=document.createElement("a")
 btn.className="media-btn"
-btn.href=item.url
+btn.href=safeURL(item.url)
 btn.target="_blank"
 btn.rel="noopener"
 btn.textContent="Open"
@@ -509,6 +527,8 @@ container.appendChild(card)
 
 }
 
+/* FETCH */
+
 async function fetchState(){
 
 const url=new URL(CONTENT_URL,location.href)
@@ -519,7 +539,11 @@ return res.json()
 
 }
 
+let polling=true
+
 async function tick(){
+
+if(!polling) return
 
 try{
 
@@ -530,6 +554,14 @@ applyState(state)
 }catch(e){}
 
 }
+
+/* VISIBILITY OPTIMIZATION */
+
+document.addEventListener("visibilitychange",()=>{
+
+polling=!document.hidden
+
+})
 
 tick()
 
