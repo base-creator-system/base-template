@@ -11,7 +11,7 @@
       "url": "https://youtube.com/"
     }
   ],
-  "backgroundColor": "#d29d00",
+  "backgroundColor": "#9a244f",
   "contactEmail": "soliddreamz@gmail.com",
   "contactLabel": "Connect",
   "mediaGateway": {
@@ -42,6 +42,14 @@
             "description": "Testing media gateway pipeline.",
             "thumbnail": "https://via.placeholder.com/600x400",
             "url": "https://www.w3schools.com/html/mov_bbb.mp4",
+            "access": "public"
+          },
+          {
+            "id": "item-1772768785723-5e9aa2949dcf2",
+            "title": "testing testing",
+            "description": "teste",
+            "thumbnail": "https://www.dropbox.com/scl/fi/ddp0qz17rcbo2ia09l6bm/fiya-playing-outside.MOV?rlkey=r381awco6l0k1sgvefhsw3ui6&st=btclvr2t&dl=0/thumb.jpg",
+            "url": "https://www.dropbox.com/scl/fi/ddp0qz17rcbo2ia09l6bm/fiya-playing-outside.MOV?rlkey=r381awco6l0k1sgvefhsw3ui6&st=btclvr2t&dl=0",
             "access": "public"
           }
         ]
