@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>DJ TEST 17</title>
+<title>DJ TEST 16</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
@@ -40,14 +40,13 @@ padding:20px 16px 100px;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:4px 2px 14px;
+padding:6px 2px 14px;
 }
 
 .brand{
 display:flex;
 align-items:center;
 gap:12px;
-min-width:0;
 }
 
 .brand img{
@@ -65,7 +64,7 @@ font-size:17px;
 }
 
 .hero{
-margin:6px 0 18px;
+margin:8px 0 18px;
 border-radius:18px;
 border:1px solid var(--stroke);
 background:rgba(255,255,255,0.03);
@@ -82,7 +81,7 @@ border:1px solid var(--stroke);
 background:var(--card);
 border-radius:18px;
 padding:16px;
-margin:14px 0;
+margin:16px 0;
 }
 
 .h1{
@@ -97,7 +96,11 @@ color:var(--muted);
 font-size:13px;
 }
 
-.hidden{display:none!important}
+.hidden{
+display:none!important;
+}
+
+/* LINKS */
 
 .row{
 display:flex;
@@ -108,7 +111,7 @@ border:1px solid var(--stroke);
 background:rgba(255,255,255,0.04);
 border-radius:16px;
 padding:14px;
-margin:12px 0;
+margin:14px 0;
 text-decoration:none;
 color:inherit;
 }
@@ -117,28 +120,23 @@ color:inherit;
 display:flex;
 flex-direction:column;
 gap:4px;
-min-width:0;
 }
 
 .label{
 font-weight:700;
 font-size:14px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
 }
 
 .hint{
 color:var(--muted);
 font-size:12px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
 }
+
+/* PILLS */
 
 .pill{
 flex:0 0 auto;
-padding:8px 14px;
+padding:8px 16px;
 border-radius:999px;
 background:var(--pillColor);
 color:#fff;
@@ -146,13 +144,15 @@ font-size:12px;
 font-weight:600;
 }
 
+/* BUTTON */
+
 .btn{
 display:inline-flex;
 align-items:center;
 justify-content:center;
 width:100%;
 padding:12px 14px;
-border-radius:14px;
+border-radius:999px;
 border:none;
 background:var(--pillColor);
 color:#fff;
@@ -162,18 +162,20 @@ cursor:pointer;
 margin-top:12px;
 }
 
+/* MEDIA */
+
 .section-title{
 font-weight:700;
 font-size:16px;
-margin:18px 4px 12px;
+margin:20px 4px 12px;
 }
 
 .media-card{
 background:#0a0a0a;
-border:1px solid #222;
-border-radius:14px;
+border:1px solid var(--stroke);
+border-radius:16px;
 padding:16px;
-margin-bottom:14px;
+margin:18px 0;
 }
 
 .media-thumb{
@@ -181,8 +183,8 @@ width:100%;
 aspect-ratio:16/9;
 border-radius:10px;
 overflow:hidden;
-margin-bottom:10px;
-border:1px solid #222;
+margin-bottom:12px;
+border:1px solid var(--stroke);
 background:#000;
 }
 
@@ -195,29 +197,32 @@ display:block;
 
 .media-title{
 font-weight:700;
-margin-bottom:4px;
 font-size:15px;
+margin-bottom:4px;
 }
 
 .media-desc{
 font-size:13px;
 color:var(--muted);
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .media-btn{
 display:inline-block;
-padding:8px 14px;
+padding:8px 16px;
 border-radius:999px;
 background:var(--pillColor);
 color:#fff;
 font-size:13px;
 text-decoration:none;
+font-weight:600;
 }
 
 .media-locked{
 opacity:0.6;
 }
+
+/* TABS */
 
 .tabs{
 position:fixed;
@@ -256,8 +261,8 @@ background:rgba(255,255,255,0.10);
 
 </style>
 
-<meta name="apple-mobile-web-app-title" content="DJ TEST 17">
-<meta name="application-name" content="DJ TEST 17">
+<meta name="apple-mobile-web-app-title" content="DJ TEST 16">
+<meta name="application-name" content="DJ TEST 16">
 <link rel="icon" href="icons/icon-192-v8.png">
 
 </head>
@@ -278,45 +283,31 @@ background:rgba(255,255,255,0.10);
 </div>
 
 <section id="view-home">
-
 <div class="card">
-
 <div class="h1">Home</div>
-
 <p class="p" id="bio"></p>
-
 <div id="connectMount"></div>
-
 </div>
-
 </section>
 
 <section id="view-media" class="hidden">
-
 <div id="mediaSection"></div>
-
 </section>
 
 <section id="view-links" class="hidden">
-
+<div class="card">
 <div id="links"></div>
-
+</div>
 </section>
 
 </div>
 
 <nav class="tabs">
-
 <div class="tabrow">
-
 <div class="tab active" data-id="home">Home</div>
-
 <div class="tab" data-id="media">Media</div>
-
 <div class="tab" data-id="links">Links</div>
-
 </div>
-
 </nav>
 
 <script>
