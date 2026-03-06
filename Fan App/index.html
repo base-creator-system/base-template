@@ -315,6 +315,21 @@ background:rgba(255,255,255,0.10);
 const CONTENT_URL="./content.json"
 const POLL_INTERVAL=15000
 
+function normalizeDropbox(url){
+
+if(!url) return url
+
+if(url.includes("dropbox.com")){
+return url
+.replace("www.dropbox.com","dl.dropboxusercontent.com")
+.replace("?dl=0","")
+.replace("&dl=0","")
+}
+
+return url
+
+}
+
 const views={
 home:document.getElementById("view-home"),
 media:document.getElementById("view-media"),
@@ -438,7 +453,7 @@ const thumb=document.createElement("div")
 thumb.className="media-thumb"
 
 const img=document.createElement("img")
-img.src=item.thumbnail
+img.src=normalizeDropbox(item.thumbnail)
 
 img.onload=()=>{
 thumb.appendChild(img)
