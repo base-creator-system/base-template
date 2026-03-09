@@ -6,1608 +6,575 @@
 <title>BASE Creator Dashboard</title>
 
 <style>
-  html, body{
-    margin:0;
-    padding:0;
-    background:#000;
-    color:#fff;
-    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    min-height:100%;
-  }
+html, body{
+margin:0;
+padding:0;
+background:#000;
+color:#fff;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+min-height:100%;
+}
 
-  .wrap{
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 18px 14px 40px;
-    box-sizing:border-box;
-  }
+.wrap{
+max-width:1080px;
+margin:0 auto;
+padding:18px 14px 40px;
+box-sizing:border-box;
+}
 
-  .top{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:14px;
-  }
+.top{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:16px;
+margin-bottom:14px;
+}
 
-  h1{
-    font-size:34px;
-    margin: 0 0 6px 0;
-    letter-spacing: 0.2px;
-  }
+h1{
+font-size:34px;
+margin:0 0 6px 0;
+letter-spacing:.2px;
+}
 
-  h2{
-    font-size:22px;
-    margin:0 0 10px 0;
-    letter-spacing:0.2px;
-  }
+.sub{
+opacity:.72;
+margin:0;
+font-size:16px;
+}
 
-  h3{
-    font-size:18px;
-    margin:0 0 10px 0;
-    letter-spacing:0.2px;
-  }
+.pill{
+border:2px solid #caa300;
+border-radius:999px;
+padding:10px 14px;
+font-weight:600;
+min-width:160px;
+text-align:center;
+}
 
-  .sub{
-    opacity:0.72;
-    margin:0;
-    font-size:16px;
-  }
+.pill.ok{border-color:#2ee06b}
+.pill.bad{border-color:#ff4b4b}
+.pill.warn{border-color:#caa300}
 
-  .pill{
-    border:2px solid #caa300;
-    border-radius:999px;
-    padding:10px 14px;
-    font-weight:600;
-    min-width: 160px;
-    text-align:center;
-  }
-  .pill.ok{ border-color:#2ee06b; }
-  .pill.bad{ border-color:#ff4b4b; }
-  .pill.warn{ border-color:#caa300; }
+.card{
+border:1px solid #222;
+background:#070707;
+border-radius:18px;
+padding:18px;
+margin:18px 0;
+box-shadow:0 0 0 1px rgba(255,255,255,.02) inset;
+}
 
-  .card{
-    border:1px solid #222;
-    background:#070707;
-    border-radius:18px;
-    padding:18px;
-    margin: 18px 0;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.02) inset;
-  }
+.row{
+display:flex;
+gap:14px;
+flex-wrap:wrap;
+}
 
-  .mono{
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    opacity:0.9;
-  }
+.col{
+flex:1;
+min-width:240px;
+}
 
-  .row{
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
+label{
+display:block;
+font-size:13px;
+opacity:.75;
+margin-bottom:6px;
+}
 
-  .col{
-    flex:1;
-    min-width: 240px;
-  }
+input,textarea,button,select{
+font:inherit;
+}
 
-  label{
-    display:block;
-    font-size:13px;
-    opacity:0.75;
-    margin-bottom:6px;
-  }
+input,textarea,select{
+width:100%;
+box-sizing:border-box;
+border-radius:14px;
+border:1px solid #2a2a2a;
+background:#000;
+color:#fff;
+padding:12px;
+outline:none;
+}
 
-  input, textarea, button, select, iframe{
-    font: inherit;
-  }
+textarea{
+min-height:120px;
+resize:vertical;
+}
 
-  input, textarea, select{
-    width:100%;
-    box-sizing:border-box;
-    border-radius:14px;
-    border:1px solid #2a2a2a;
-    background:#000;
-    color:#fff;
-    padding:12px 12px;
-    outline:none;
-  }
+input[type=color]{
+height:52px;
+padding:6px;
+cursor:pointer;
+}
 
-  input:disabled,
-  textarea:disabled,
-  select:disabled{
-    opacity:0.55;
-    cursor:not-allowed;
-  }
+.btnRow{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-top:12px;
+}
 
-  textarea{
-    min-height:120px;
-    resize:vertical;
-  }
+button{
+border-radius:14px;
+border:1px solid #2a2a2a;
+background:#0b0b0b;
+color:#fff;
+padding:12px 16px;
+cursor:pointer;
+}
 
-  input[type="color"]{
-    height: 52px;
-    padding: 6px;
-    cursor: pointer;
-  }
+button:hover{border-color:#444}
+button:disabled{opacity:.5;cursor:not-allowed}
 
-  input[type="checkbox"]:disabled{
-    opacity:0.55;
-    cursor:not-allowed;
-  }
+.primary{border-color:#caa300!important}
+.danger{border-color:#5a1b1b!important}
 
-  .btnRow{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-top:12px;
-  }
+.linksList{margin-top:10px}
 
-  button{
-    border-radius:14px;
-    border:1px solid #2a2a2a;
-    background:#0b0b0b;
-    color:#fff;
-    padding:12px 16px;
-    cursor:pointer;
-  }
-  button:hover{ border-color:#444; }
-  button:disabled{ opacity:0.5; cursor:not-allowed; }
+.linkRow{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+padding:10px 12px;
+border:1px solid #222;
+border-radius:14px;
+margin-top:10px;
+background:#050505;
+}
 
-  .danger{
-    border-color:#5a1b1b !important;
-  }
+.linkText{
+opacity:.92;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+max-width:calc(100% - 110px);
+}
 
-  .primary{
-    border-color:#caa300 !important;
-  }
+.tiny{
+font-size:12px;
+opacity:.65;
+margin-top:6px;
+}
 
-  .linksList{
-    margin-top:10px;
-  }
-
-  .linkRow{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:10px 12px;
-    border:1px solid #222;
-    border-radius:14px;
-    margin-top:10px;
-    background:#050505;
-  }
-
-  .linkText{
-    opacity:0.92;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    max-width: calc(100% - 110px);
-  }
-
-  .tiny{
-    font-size:12px;
-    opacity:0.65;
-    margin-top:6px;
-  }
-
-  #appIconPreview{
-    display:none;
-    max-width:120px;
-    margin-top:10px;
-    border-radius:14px;
-    border:1px solid #222;
-    background:#000;
-  }
-
-  .statusBox{
-    white-space:pre-wrap;
-    font-size:12px;
-    opacity:0.75;
-  }
-
-  .hiddenEngine{
-    position:absolute;
-    left:-99999px;
-    top:-99999px;
-    width:1px;
-    height:1px;
-    opacity:0;
-    pointer-events:none;
-  }
-
-  .toggleRow{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-
-  .mediaList{
-    margin-top:12px;
-  }
-
-  .mediaItemRow{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-    padding:12px;
-    border:1px solid #222;
-    border-radius:14px;
-    margin-top:10px;
-    background:#050505;
-  }
-
-  .mediaMeta{
-    flex:1;
-    min-width:0;
-  }
-
-  .mediaTitle{
-    font-weight:700;
-    margin-bottom:4px;
-  }
-
-  .mediaSub{
-    opacity:0.8;
-    font-size:12px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  .sectionHead{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:10px;
-  }
-
-  .sectionCopy{
-    max-width:720px;
-  }
-
-  .livePreviewShell{
-    border:1px solid #222;
-    border-radius:18px;
-    overflow:hidden;
-    background:#000;
-  }
-
-  .livePreviewBar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    padding:10px 12px;
-    border-bottom:1px solid #181818;
-    background:#050505;
-  }
-
-  .previewFrame{
-    display:block;
-    width:100%;
-    height:720px;
-    border:0;
-    background:#000;
-  }
-
-  .previewFallback{
-    padding:16px;
-    border-top:1px solid #181818;
-  }
-
-  .miniPreview{
-    border:1px solid #222;
-    border-radius:18px;
-    padding:16px;
-    background:#040404;
-  }
-
-  .miniPreviewName{
-    font-size:20px;
-    font-weight:700;
-    margin-bottom:8px;
-  }
-
-  .miniPreviewBio{
-    opacity:0.85;
-    margin-bottom:14px;
-  }
-
-  .miniPreviewPill{
-    display:inline-block;
-    border:2px solid #caa300;
-    border-radius:999px;
-    padding:10px 14px;
-    font-weight:600;
-    margin-bottom:14px;
-  }
-
-  .miniPreviewList{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-
-  .miniPreviewLink{
-    border:1px solid #222;
-    border-radius:999px;
-    padding:8px 12px;
-    font-size:13px;
-    background:#000;
-  }
-
-  .lockedNotice{
-    border:1px dashed #333;
-    border-radius:14px;
-    padding:12px;
-    margin-top:10px;
-    background:#040404;
-  }
-
-  .publishZone{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:14px;
-    flex-wrap:wrap;
-  }
-
-  .publishActions{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    align-items:center;
-  }
-
-  @media (max-width: 700px){
-    .top{
-      flex-direction:column;
-      align-items:flex-start;
-    }
-    .previewFrame{
-      height:600px;
-    }
-  }
+.statusBox{
+white-space:pre-wrap;
+font-size:12px;
+opacity:.75;
+}
 </style>
 </head>
 
 <body>
-  <div class="wrap">
 
-    <div class="top">
-      <div>
-        <h1>BASE Creator Dashboard</h1>
-        <p class="sub">Load current state first, then edit, preview, and publish.</p>
-      </div>
-      <div id="statePill" class="pill warn">STATUS: ready</div>
-    </div>
+<div class="wrap">
 
-    <!-- INITIALIZE SESSION -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Initialize Session</h2>
-          <div class="tiny">Load the current Fan App state before editing. This keeps dashboard edits aligned with the live app.</div>
-        </div>
-      </div>
+<div class="top">
+<div>
+<h1>BASE Creator Dashboard</h1>
+<p class="sub">Load current state first, then edit, preview, and publish.</p>
+</div>
+<div id="statePill" class="pill warn">STATUS: ready</div>
+</div>
 
-      <div class="row">
-        <div class="col">
-          <label for="token">Creator Key</label>
-          <input id="token" type="password" autocomplete="off" />
-        </div>
-        <div class="col">
-          <label for="contentUrl">content.json URL</label>
-          <input id="contentUrl" type="text" />
-        </div>
-      </div>
+<div class="card">
 
-      <div class="btnRow">
-        <button id="btnLoad" type="button" class="primary">Load Current State</button>
-      </div>
+<div class="row">
+<div class="col">
+<label>Creator Key</label>
+<input id="token" type="password">
+</div>
 
-      <div class="tiny" id="lastSha">sha: —</div>
-    </div>
+<div class="col">
+<label>content.json URL</label>
+<input id="contentUrl">
+</div>
+</div>
 
-    <!-- IDENTITY -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Identity</h2>
-          <div class="tiny">Update the public-facing identity shown in the Fan App.</div>
-        </div>
-      </div>
+<div class="btnRow">
+<button id="btnLoad" class="primary">Load Current State</button>
+</div>
 
-      <div class="row">
-        <div class="col">
-          <label for="name">Name</label>
-          <input id="name" type="text" disabled />
-        </div>
-        <div class="col">
-          <label for="bio">Bio</label>
-          <input id="bio" type="text" disabled />
-        </div>
-      </div>
+<div class="tiny" id="lastSha">sha: —</div>
 
-      <div class="row" style="margin-top:14px;">
-        <div class="col">
-          <label for="contactEmail">Email</label>
-          <input id="contactEmail" type="text" placeholder="name@email.com" disabled />
-          <div class="tiny">If empty → no Connect button appears in Fan App.</div>
-        </div>
-        <div class="col">
-          <label for="contactLabel">Button label (optional)</label>
-          <input id="contactLabel" type="text" placeholder="Connect" disabled />
-          <div class="tiny">Controls the text shown on the button.</div>
-        </div>
-      </div>
+</div>
 
-      <textarea id="links" class="hiddenEngine"></textarea>
-    </div>
+<div class="card">
+<div class="row">
+<div class="col">
+<label>Name</label>
+<input id="name">
+</div>
 
-    <!-- LINKS -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Links</h2>
-          <div class="tiny">Manage external destinations shown in the Fan App.</div>
-        </div>
-      </div>
+<div class="col">
+<label>Bio</label>
+<input id="bio">
+</div>
+</div>
 
-      <div class="row">
-        <div class="col">
-          <label for="linkLabelInput">Link label</label>
-          <input id="linkLabelInput" type="text" placeholder="Instagram" disabled />
-        </div>
-        <div class="col">
-          <label for="linkUrlInput">URL</label>
-          <input id="linkUrlInput" type="text" placeholder="https://..." disabled />
-        </div>
-      </div>
+<div style="margin-top:14px;">
+<label>Background Color</label>
+<input id="backgroundColor" type="color">
+</div>
 
-      <div class="btnRow">
-        <button id="addLinkBtn" type="button" disabled>Add Link</button>
-        <button id="clearLinksBtn" type="button" class="danger" disabled>Clear Links</button>
-      </div>
+<div style="margin-top:14px;">
+<label>Pill Color</label>
+<input id="pillColor" type="color">
+</div>
+</div>
 
-      <div id="linksList" class="linksList"></div>
-    </div>
+<div class="card">
+<h3>Links</h3>
 
-    <!-- MEDIA GATEWAY -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Media Gateway</h2>
-          <div class="tiny">Add public or paid external media entries. Paid items never store a URL.</div>
-        </div>
-      </div>
+<div class="row">
+<div class="col">
+<label>Label</label>
+<input id="linkLabelInput">
+</div>
 
-      <div class="toggleRow">
-        <div class="tiny">Controls what fans can access from the Media tab.</div>
-        <label style="display:flex;align-items:center;gap:10px;margin:0;">
-          <span class="tiny">Enabled</span>
-          <input id="mediaEnabled" type="checkbox" style="width:auto;height:auto;" disabled>
-        </label>
-      </div>
+<div class="col">
+<label>URL</label>
+<input id="linkUrlInput">
+</div>
+</div>
 
-      <div class="row" style="margin-top:12px;">
-        <div class="col">
-          <label for="mediaCollectionTitle">Collection Title</label>
-          <input id="mediaCollectionTitle" type="text" placeholder="Latest" disabled>
-          <div class="tiny">V1: one collection. Multi-collection later.</div>
-        </div>
-      </div>
+<div class="btnRow">
+<button id="addLinkBtn">Add Link</button>
+<button id="clearLinksBtn" class="danger">Clear Links</button>
+</div>
 
-      <div class="row" style="margin-top:12px;">
-        <div class="col">
-          <label for="mediaTitle">Item Title</label>
-          <input id="mediaTitle" type="text" placeholder="Clip title" disabled>
-        </div>
-        <div class="col">
-          <label for="mediaAccess">Access</label>
-          <select id="mediaAccess" disabled>
-            <option value="public">public</option>
-            <option value="paid">paid</option>
-          </select>
-        </div>
-      </div>
+<div id="linksList" class="linksList"></div>
+</div>
 
-      <div class="row" style="margin-top:12px;">
-        <div class="col">
-          <label for="mediaUrl">URL (public only)</label>
-          <input id="mediaUrl" type="text" placeholder="https://..." disabled>
-          <div class="tiny">If Access=paid → URL is stored empty so nothing leaks.</div>
-        </div>
-      </div>
+<div class="card">
 
-      <div class="row" style="margin-top:12px;">
-        <div class="col">
-          <label for="mediaThumb">Thumbnail URL (optional)</label>
-          <input id="mediaThumb" type="text" placeholder="https://.../thumb.jpg" disabled>
-        </div>
-      </div>
+<div class="row">
+<div class="col">
+<label>Email</label>
+<input id="contactEmail">
+</div>
 
-      <div class="row" style="margin-top:12px;">
-        <div class="col">
-          <label for="mediaDesc">Description (optional)</label>
-          <input id="mediaDesc" type="text" placeholder="Short description" disabled>
-        </div>
-      </div>
+<div class="col">
+<label>Button Label</label>
+<input id="contactLabel">
+</div>
+</div>
 
-      <div class="btnRow">
-        <button id="btnAddMedia" type="button" disabled>Add Item</button>
-        <button id="btnClearMedia" type="button" class="danger" disabled>Clear Media</button>
-      </div>
+</div>
 
-      <div id="mediaList" class="mediaList"></div>
-    </div>
+<div class="card">
 
-    <!-- APPEARANCE -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Appearance</h2>
-          <div class="tiny">Adjust the Fan App look without changing the Base architecture.</div>
-        </div>
-      </div>
+<div class="row">
+<div class="col">
+<label>Upload Icon</label>
+<input id="appIconFile" type="file">
+</div>
 
-      <div class="row">
-        <div class="col">
-          <label for="backgroundColor">Background Color</label>
-          <input id="backgroundColor" type="color" value="#000000" disabled />
-        </div>
-        <div class="col">
-          <label for="pillColor">Pill Color</label>
-          <input id="pillColor" type="color" value="#caa300" disabled />
-        </div>
-      </div>
-    </div>
+<div class="col">
+<button id="btnUpdateIcon">Update Icon</button>
+</div>
+</div>
 
-    <!-- APP ICON -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>App Icon</h2>
-          <div class="tiny">Upload a PNG to write new icon versions and sync manifest + iOS identity tags.</div>
-        </div>
-      </div>
+</div>
 
-      <div class="row">
-        <div class="col">
-          <label for="appIconFile">Upload PNG</label>
-          <input id="appIconFile" type="file" accept="image/png" disabled />
-          <div id="appIconStatus" class="tiny"></div>
-          <img id="appIconPreview" alt="Icon preview">
-        </div>
-        <div class="col" style="display:flex;align-items:flex-end;">
-          <button id="btnUpdateIcon" type="button" disabled>Update Icon</button>
-        </div>
-      </div>
-    </div>
+<div class="card">
 
-    <!-- LIVE FAN APP PREVIEW -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Live Fan App Preview</h2>
-          <div class="tiny">Dashboard side is ready now. Full live rendering will activate after the Fan App receives its preview listener hook.</div>
-        </div>
-      </div>
+<div style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;">
 
-      <div class="livePreviewShell">
-        <div class="livePreviewBar">
-          <div class="mono">Preview source: ../Fan App/index.html</div>
-          <div class="tiny" id="previewBridgeState">Preview bridge: waiting for Fan App hook</div>
-        </div>
+<div>
+<div>Repo: <span id="repoLabel"></span></div>
+<div class="tiny">Target: Fan App/content.json</div>
+</div>
 
-        <iframe
-          id="fanPreviewFrame"
-          class="previewFrame"
-          title="BASE Fan App Preview"
-          src="../Fan App/index.html?basePreviewShell=1"
-        ></iframe>
+<div style="display:flex;gap:12px;flex-wrap:wrap;">
+<button id="btnPublish">Publish</button>
+<button id="btnResetToken" class="danger">Reset Key</button>
+</div>
 
-        <div class="previewFallback">
-          <div class="tiny" style="margin-top:0;">Mini preview below reflects dashboard changes immediately even before the real Fan App hook is added.</div>
-          <div id="miniPreview" class="miniPreview" style="margin-top:12px;">
-            <div id="pName" class="miniPreviewName">—</div>
-            <div id="pBio" class="miniPreviewBio">—</div>
-            <div id="previewConnectWrap" style="margin-bottom:14px; display:none;">
-              <span id="previewConnectPill" class="miniPreviewPill">Connect</span>
-            </div>
-            <div id="pLinks" class="miniPreviewList"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+</div>
 
-    <!-- PUBLISH -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Publish</h2>
-          <div class="tiny">Publish writes the updated content.json and keeps identity sync behavior intact.</div>
-        </div>
-      </div>
+</div>
 
-      <div class="publishZone">
-        <div>
-          <div class="mono">
-            Repo: <span id="repoLabel"></span><br>
-            Target: Fan App/content.json
-          </div>
-        </div>
+<div class="card">
+<h3>Status</h3>
+<div id="status" class="statusBox"></div>
+</div>
 
-        <div class="publishActions">
-          <button id="btnPublish" type="button" disabled>Publish</button>
-          <button id="btnResetToken" type="button" class="danger">Reset Key</button>
-        </div>
-      </div>
-
-      <div id="lockedNotice" class="lockedNotice">
-        <div class="tiny" style="margin-top:0;">Editing remains locked until current state is loaded.</div>
-      </div>
-    </div>
-
-    <!-- STATUS -->
-    <div class="card">
-      <div class="sectionHead">
-        <div class="sectionCopy">
-          <h2>Status</h2>
-          <div class="tiny">Publish logs and system activity.</div>
-        </div>
-      </div>
-      <div id="status" class="statusBox"></div>
-    </div>
-
-  </div>
+</div>
 
 <script>
-/* BASE Creator Dashboard — V1 Publisher + Dashboard Preview Shell
-   - Publishes Fan App/content.json via GitHub API
-   - Identity sync remains as-is
-   - Merge-safe publish so unknown keys are preserved
-   - Visible Media Gateway controls
-   - Added pillColor support
-   - Added dashboard-side preview message bridge shell
-   - Does NOT assume Fan App hook exists yet
-*/
-(() => {
-
-  const OWNER = "soliddreamz";
-  const REPO = "Base-Creator-Land";
-  const BRANCH = "main";
-
-  const TARGET_PATH = "Fan App/content.json";
-  const MANIFEST_PATH = "Fan App/manifest.json";
-  const FAN_INDEX_PATH = "Fan App/index.html";
-
-  const DEFAULT_CONTENT_URL =
-    `https://${OWNER}.github.io/${REPO}/Fan%20App/content.json`;
-
-  const PREVIEW_FRAME_SRC = "../Fan App/index.html?basePreviewShell=1";
-
-  const $ = (id) => document.getElementById(id);
-
-  const el = {
-    repoLabel: $("repoLabel"),
-    token: $("token"),
-    contentUrl: $("contentUrl"),
-    btnLoad: $("btnLoad"),
-    btnPublish: $("btnPublish"),
-    btnResetToken: $("btnResetToken"),
-
-    name: $("name"),
-    bio: $("bio"),
-    backgroundColor: $("backgroundColor"),
-    pillColor: $("pillColor"),
-    links: $("links"),
-
-    linkLabelInput: $("linkLabelInput"),
-    linkUrlInput: $("linkUrlInput"),
-    addLinkBtn: $("addLinkBtn"),
-    clearLinksBtn: $("clearLinksBtn"),
-    linksList: $("linksList"),
-
-    contactEmail: $("contactEmail"),
-    contactLabel: $("contactLabel"),
-
-    mediaEnabled: $("mediaEnabled"),
-    mediaCollectionTitle: $("mediaCollectionTitle"),
-    mediaTitle: $("mediaTitle"),
-    mediaAccess: $("mediaAccess"),
-    mediaUrl: $("mediaUrl"),
-    mediaThumb: $("mediaThumb"),
-    mediaDesc: $("mediaDesc"),
-    btnAddMedia: $("btnAddMedia"),
-    btnClearMedia: $("btnClearMedia"),
-    mediaList: $("mediaList"),
-
-    appIconFile: $("appIconFile"),
-    btnUpdateIcon: $("btnUpdateIcon"),
-    appIconStatus: $("appIconStatus"),
-    appIconPreview: $("appIconPreview"),
-
-    previewName: $("pName"),
-    previewBio: $("pBio"),
-    previewLinks: $("pLinks"),
-    previewConnectWrap: $("previewConnectWrap"),
-    previewConnectPill: $("previewConnectPill"),
-    miniPreview: $("miniPreview"),
-    previewFrame: $("fanPreviewFrame"),
-    previewBridgeState: $("previewBridgeState"),
-
-    status: $("status"),
-    lastSha: $("lastSha"),
-    statePill: $("statePill"),
-    lockedNotice: $("lockedNotice"),
-  };
-
-  const LS_TOKEN = "base_creator_token_v1";
-
-  let lastRemoteSha = null;
-  let hasLoadedState = false;
-
-  // Links state (Tier 0)
-  let linkState = [];
-
-  // Media state (V1: 1 collection)
-  let mediaHydrated = false;
-  let mediaTouched = false;
-  let mediaItems = [];
-  let mediaEnabledState = false;
-
-  function log(line) {
-    const stamp = new Date().toLocaleString();
-    if (!el.status) return;
-    el.status.textContent = `[${stamp}] ${line}\n` + el.status.textContent;
-  }
-
-  function setPill(type, text) {
-    if (!el.statePill) return;
-    el.statePill.className = `pill ${type}`;
-    el.statePill.textContent = text;
-  }
-
-  function setEditingLocked(locked) {
-    const nodes = [
-      el.name,
-      el.bio,
-      el.backgroundColor,
-      el.pillColor,
-      el.linkLabelInput,
-      el.linkUrlInput,
-      el.addLinkBtn,
-      el.clearLinksBtn,
-      el.contactEmail,
-      el.contactLabel,
-      el.mediaEnabled,
-      el.mediaCollectionTitle,
-      el.mediaTitle,
-      el.mediaAccess,
-      el.mediaUrl,
-      el.mediaThumb,
-      el.mediaDesc,
-      el.btnAddMedia,
-      el.btnClearMedia,
-      el.appIconFile,
-      el.btnUpdateIcon
-    ];
-
-    nodes.forEach((node) => {
-      if (!node) return;
-      node.disabled = locked;
-    });
-
-    if (el.lockedNotice) {
-      el.lockedNotice.style.display = locked ? "block" : "none";
-    }
-  }
-
-  function syncLinksToEngine() {
-    if (el.links) el.links.value = JSON.stringify(linkState, null, 2);
-  }
-
-  function renderLinks() {
-    if (!el.linksList) return;
-
-    el.linksList.innerHTML = "";
-    if (el.previewLinks) el.previewLinks.innerHTML = "";
-
-    linkState.forEach((link, index) => {
-      const row = document.createElement("div");
-      row.className = "linkRow";
-
-      const text = document.createElement("div");
-      text.className = "linkText";
-      text.textContent = `${link.label} — ${link.url}`;
-
-      const removeBtn = document.createElement("button");
-      removeBtn.type = "button";
-      removeBtn.textContent = "Remove";
-      removeBtn.disabled = !hasLoadedState;
-      removeBtn.onclick = () => {
-        linkState.splice(index, 1);
-        renderLinks();
-        syncLinksToEngine();
-        enablePublishIfReady();
-      };
-
-      row.appendChild(text);
-      row.appendChild(removeBtn);
-      el.linksList.appendChild(row);
-
-      if (el.previewLinks) {
-        const p = document.createElement("div");
-        p.className = "miniPreviewLink";
-        p.textContent = link.label;
-        el.previewLinks.appendChild(p);
-      }
-    });
-  }
-
-  function hydrateLinks(arr) {
-    linkState = Array.isArray(arr) ? [...arr] : [];
-    renderLinks();
-    syncLinksToEngine();
-  }
-
-  function renderMediaList() {
-    if (!el.mediaList) return;
-    el.mediaList.innerHTML = "";
-
-    const meta = document.createElement("div");
-    meta.className = "tiny";
-    meta.textContent = `Items: ${mediaItems.length}`;
-    el.mediaList.appendChild(meta);
-
-    mediaItems.forEach((item, idx) => {
-      const row = document.createElement("div");
-      row.className = "mediaItemRow";
-
-      const left = document.createElement("div");
-      left.className = "mediaMeta";
-
-      const t = document.createElement("div");
-      t.className = "mediaTitle";
-      t.textContent = item.title || "(untitled)";
-
-      const sub = document.createElement("div");
-      sub.className = "mediaSub";
-      sub.textContent = `${item.access || "public"} — ${item.url ? item.url : "(no url)"}`;
-
-      left.appendChild(t);
-      left.appendChild(sub);
-
-      const remove = document.createElement("button");
-      remove.type = "button";
-      remove.textContent = "Remove";
-      remove.disabled = !hasLoadedState;
-      remove.onclick = () => {
-        mediaItems.splice(idx, 1);
-        mediaTouched = true;
-        renderMediaList();
-        enablePublishIfReady();
-      };
-
-      row.appendChild(left);
-      row.appendChild(remove);
-      el.mediaList.appendChild(row);
-    });
-  }
-
-  function hydrateMediaGateway(current) {
-    const mg = current && typeof current === "object" ? current.mediaGateway : null;
-
-    mediaHydrated = true;
-
-    if (!mg || typeof mg !== "object") {
-      mediaEnabledState = false;
-      mediaItems = [];
-      if (el.mediaEnabled) el.mediaEnabled.checked = false;
-      if (el.mediaCollectionTitle) el.mediaCollectionTitle.value = "Latest";
-      renderMediaList();
-      return;
-    }
-
-    mediaEnabledState = mg.enabled === true;
-    if (el.mediaEnabled) el.mediaEnabled.checked = mediaEnabledState;
-
-    const collections = Array.isArray(mg.collections) ? mg.collections : [];
-    const first = (collections[0] && typeof collections[0] === "object") ? collections[0] : {};
-
-    if (el.mediaCollectionTitle) el.mediaCollectionTitle.value = String(first.title || "Latest");
-
-    const items = Array.isArray(first.items) ? first.items : [];
-    mediaItems = items.map((x) => ({
-      id: x?.id || `item-${Math.random().toString(16).slice(2)}`,
-      title: String(x?.title || ""),
-      description: String(x?.description || ""),
-      thumbnail: String(x?.thumbnail || ""),
-      url: String(x?.url || ""),
-      access: x?.access === "paid" ? "paid" : "public"
-    }));
-
-    renderMediaList();
-  }
-
-  function buildDraftTier0() {
-    const draft = {
-      name: (el.name?.value || "").trim(),
-      bio: (el.bio?.value || "").trim(),
-      links: linkState,
-      backgroundColor: el.backgroundColor?.value || "#000000",
-      pillColor: el.pillColor?.value || "#caa300"
-    };
-
-    const ce = (el.contactEmail?.value || "").trim();
-    const cl = (el.contactLabel?.value || "").trim();
-
-    if (ce) draft.contactEmail = ce;
-    if (cl) draft.contactLabel = cl;
-
-    if (!draft.name) delete draft.name;
-    if (!draft.bio) delete draft.bio;
-
-    return draft;
-  }
-
-  function buildDraftMediaGatewayIfPresent() {
-    if (!(mediaHydrated || mediaTouched)) return null;
-
-    const enabled = el.mediaEnabled?.checked === true;
-    const title = (el.mediaCollectionTitle?.value || "Latest").trim() || "Latest";
-
-    const items = mediaItems.map((it) => ({
-      id: it.id || `item-${Math.random().toString(16).slice(2)}`,
-      title: (it.title || "").trim(),
-      description: (it.description || "").trim(),
-      thumbnail: (it.thumbnail || "").trim(),
-      url: (it.access === "paid") ? "" : (it.url || "").trim(),
-      access: (it.access === "paid") ? "paid" : "public"
-    }));
-
-    return {
-      enabled,
-      collections: [{ title, items }]
-    };
-  }
-
-  function buildPreviewDraft() {
-    const draftTier0 = buildDraftTier0();
-    const previewObj = {
-      ...draftTier0
-    };
-
-    const mg = buildDraftMediaGatewayIfPresent();
-    if (mg) previewObj.mediaGateway = mg;
-
-    return previewObj;
-  }
-
-  function refreshMiniPreview() {
-    const draft = buildDraftTier0();
-
-    if (el.previewName) el.previewName.textContent = draft.name || "—";
-    if (el.previewBio) el.previewBio.textContent = draft.bio || "—";
-
-    if (el.previewConnectWrap && el.previewConnectPill) {
-      const hasConnect = !!((draft.contactEmail || "").trim());
-      el.previewConnectWrap.style.display = hasConnect ? "block" : "none";
-      el.previewConnectPill.textContent = (draft.contactLabel || "Connect").trim() || "Connect";
-      el.previewConnectPill.style.borderColor = draft.pillColor || "#caa300";
-      el.previewConnectPill.style.background = "transparent";
-      el.previewConnectPill.style.color = "#fff";
-    }
-
-    if (el.miniPreview) {
-      el.miniPreview.style.background = draft.backgroundColor || "#000000";
-    }
-
-    renderLinks();
-  }
-
-  function postPreviewToFrame() {
-    if (!el.previewFrame || !el.previewFrame.contentWindow) return;
-
-    const payload = buildPreviewDraft();
-
-    try {
-      el.previewFrame.contentWindow.postMessage({
-        type: "BASE_PREVIEW",
-        payload
-      }, "*");
-    } catch (err) {
-      log(`Preview post skipped: ${err.message}`);
-    }
-  }
-
-  function refreshPreview() {
-    refreshMiniPreview();
-    postPreviewToFrame();
-  }
-
-  function enablePublishIfReady() {
-    const hasToken = (el.token?.value || "").trim().length > 0;
-    if (el.btnPublish) el.btnPublish.disabled = !(hasLoadedState && hasToken && lastRemoteSha);
-    refreshPreview();
-  }
-
-  function requireToken() {
-    const token = (el.token?.value || "").trim();
-    if (!token) throw new Error("Missing creator key.");
-    return token;
-  }
-
-  function ghHeaders(token) {
-    return {
-      "Accept": "application/vnd.github+json",
-      "Authorization": `Bearer ${token}`,
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Content-Type": "application/json",
-    };
-  }
-
-  function toBase64Utf8(str) {
-    const utf8 = new TextEncoder().encode(str);
-    let bin = "";
-    utf8.forEach((b) => bin += String.fromCharCode(b));
-    return btoa(bin);
-  }
-
-  function fromBase64Utf8(b64) {
-    const bytes = Uint8Array.from(atob(b64.replace(/\s/g, "")), c => c.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
-  }
-
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64 = String(reader.result).split(",")[1];
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function ghEncodePath(path) {
-    return path.split("/").map(encodeURIComponent).join("/");
-  }
-
-  async function ghGetFileMeta(token, path) {
-    const api =
-      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${ghEncodePath(path)}?ref=${BRANCH}`;
-    const res = await fetch(api, { headers: ghHeaders(token) });
-    if (!res.ok) throw new Error(`GitHub GET failed (${res.status})`);
-    return await res.json();
-  }
-
-  async function ghPutFile(token, path, sha, contentBase64, message) {
-    const api =
-      `https://api.github.com/repos/${OWNER}/${REPO}/contents/${ghEncodePath(path)}`;
-
-    const body = {
-      message,
-      content: contentBase64,
-      branch: BRANCH,
-    };
-
-    if (sha) body.sha = sha;
-
-    const res = await fetch(api, {
-      method: "PUT",
-      headers: ghHeaders(token),
-      body: JSON.stringify(body),
-    });
-
-    if (!res.ok) throw new Error(`GitHub PUT failed (${res.status})`);
-    return await res.json();
-  }
-
-  async function ghUpsertFile(token, path, contentBase64, message) {
-    try {
-      const meta = await ghGetFileMeta(token, path);
-      return await ghPutFile(token, path, meta.sha, contentBase64, message);
-    } catch (e) {
-      if (String(e.message || "").includes("(404)")) {
-        return await ghPutFile(token, path, null, contentBase64, message);
-      }
-      throw e;
-    }
-  }
-
-  async function fetchPublicJson(url) {
-    const u = new URL(url);
-    u.searchParams.set("ts", String(Date.now()));
-    const res = await fetch(u.toString(), { cache: "no-store" });
-    if (!res.ok) throw new Error(`Failed to load content.json (${res.status})`);
-    return await res.json();
-  }
-
-  function safeAppNameFromDraft(draftObj) {
-    const n = String(draftObj?.name || "").trim();
-    return n || "Creator Home";
-  }
-
-  function makeShortName(name) {
-    const n = String(name || "").trim();
-    if (!n) return "Home";
-    return n.length > 16 ? n.slice(0, 16).trim() : n;
-  }
-
-  function ensureManifestIdentity(manifestObj, appName) {
-    manifestObj.name = appName;
-    manifestObj.short_name = makeShortName(appName);
-    return manifestObj;
-  }
-
-  function getIconSrcFromManifest(manifestObj, size) {
-    const icons = Array.isArray(manifestObj?.icons) ? manifestObj.icons : [];
-    const target = icons.find(i => String(i?.sizes || "") === size) || icons[0];
-    const src = String(target?.src || "icons/icon-192.png");
-    return src;
-  }
-
-  function escapeHtml(s) {
-    return String(s || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-  }
-
-  function escapeAttr(s) {
-    return String(s || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll(`"`, "&quot;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;");
-  }
-
-  function updateFanIndexHtmlIdentity(htmlText, appName, appleTouchHref) {
-    let html = String(htmlText || "");
-
-    if (/<title>.*?<\/title>/i.test(html)) {
-      html = html.replace(/<title>.*?<\/title>/i, `<title>${escapeHtml(appName)}</title>`);
-    } else {
-      html = html.replace(/<head[^>]*>/i, (m) => `${m}\n<title>${escapeHtml(appName)}</title>`);
-    }
-
-    if (/<meta[^>]+name=["']apple-mobile-web-app-title["'][^>]*>/i.test(html)) {
-      html = html.replace(
-        /<meta[^>]+name=["']apple-mobile-web-app-title["'][^>]*>/i,
-        `<meta name="apple-mobile-web-app-title" content="${escapeAttr(appName)}">`
-      );
-    } else {
-      html = html.replace(/<\/head>/i,
-        `  <meta name="apple-mobile-web-app-title" content="${escapeAttr(appName)}">\n</head>`
-      );
-    }
-
-    if (/<meta[^>]+name=["']application-name["'][^>]*>/i.test(html)) {
-      html = html.replace(
-        /<meta[^>]+name=["']application-name["'][^>]*>/i,
-        `<meta name="application-name" content="${escapeAttr(appName)}">`
-      );
-    } else {
-      html = html.replace(/<\/head>/i,
-        `  <meta name="application-name" content="${escapeAttr(appName)}">\n</head>`
-      );
-    }
-
-    const appleTag = `<link rel="apple-touch-icon" href="${escapeAttr(appleTouchHref)}">`;
-    if (/<link[^>]+rel=["']apple-touch-icon["'][^>]*>/i.test(html)) {
-      html = html.replace(
-        /<link[^>]+rel=["']apple-touch-icon["'][^>]*>/i,
-        appleTag
-      );
-    } else {
-      html = html.replace(/<\/head>/i, `  ${appleTag}\n</head>`);
-    }
-
-    const icoTag = `<link rel="icon" href="${escapeAttr(appleTouchHref)}">`;
-    if (/<link[^>]+rel=["']icon["'][^>]*>/i.test(html)) {
-      html = html.replace(/<link[^>]+rel=["']icon["'][^>]*>/i, icoTag);
-    } else {
-      html = html.replace(/<\/head>/i, `  ${icoTag}\n</head>`);
-    }
-
-    return html;
-  }
-
-  function bumpManifestVersionAndIconPaths(manifestObj) {
-    const currentStart = String(manifestObj.start_url || "./?v=1");
-    const m = currentStart.match(/v=(\d+)/);
-    const next = m ? Number(m[1]) + 1 : 2;
-
-    manifestObj.start_url = `./?v=${next}`;
-
-    manifestObj.icons = [
-      { src: `icons/icon-192-v${next}.png`, sizes: "192x192", type: "image/png" },
-      { src: `icons/icon-512-v${next}.png`, sizes: "512x512", type: "image/png" },
-    ];
-
-    return next;
-  }
-
-  function mergeTier0IntoExisting(existing, draftTier0) {
-    const base = (existing && typeof existing === "object" && !Array.isArray(existing)) ? existing : {};
-
-    if (Object.prototype.hasOwnProperty.call(draftTier0, "name")) base.name = draftTier0.name;
-    else delete base.name;
-
-    if (Object.prototype.hasOwnProperty.call(draftTier0, "bio")) base.bio = draftTier0.bio;
-    else delete base.bio;
-
-    base.links = Array.isArray(draftTier0.links) ? draftTier0.links : [];
-    base.backgroundColor = draftTier0.backgroundColor || "#000000";
-    base.pillColor = draftTier0.pillColor || "#caa300";
-
-    if (Object.prototype.hasOwnProperty.call(draftTier0, "contactEmail")) base.contactEmail = draftTier0.contactEmail;
-    else delete base.contactEmail;
-
-    if (Object.prototype.hasOwnProperty.call(draftTier0, "contactLabel")) base.contactLabel = draftTier0.contactLabel;
-    else delete base.contactLabel;
-
-    return base;
-  }
-
-  function handlePreviewFrameLoad() {
-    postPreviewToFrame();
-  }
-
-  // ===== Events =====
-
-  el.token?.addEventListener("input", () => {
-    const t = (el.token.value || "").trim();
-    if (t) localStorage.setItem(LS_TOKEN, t);
-    enablePublishIfReady();
-  });
-
-  el.btnResetToken?.addEventListener("click", () => {
-    localStorage.removeItem(LS_TOKEN);
-    if (el.token) el.token.value = "";
-    lastRemoteSha = null;
-    hasLoadedState = false;
-    setEditingLocked(true);
-    if (el.lastSha) el.lastSha.textContent = "sha: —";
-    enablePublishIfReady();
-    setPill("warn", "STATUS: ready");
-    log("Creator key reset.");
-  });
-
-  [
-    el.name,
-    el.bio,
-    el.backgroundColor,
-    el.pillColor,
-    el.contactEmail,
-    el.contactLabel
-  ].forEach((node) => {
-    node?.addEventListener("input", () => enablePublishIfReady());
-  });
-
-  el.addLinkBtn?.addEventListener("click", () => {
-    if (!hasLoadedState) return;
-
-    const label = (el.linkLabelInput?.value || "").trim();
-    const url = (el.linkUrlInput?.value || "").trim();
-    if (!url) return;
-
-    linkState.push({
-      label: label || url,
-      url
-    });
-
-    if (el.linkLabelInput) el.linkLabelInput.value = "";
-    if (el.linkUrlInput) el.linkUrlInput.value = "";
-
-    renderLinks();
-    syncLinksToEngine();
-    enablePublishIfReady();
-  });
-
-  el.clearLinksBtn?.addEventListener("click", () => {
-    if (!hasLoadedState) return;
-    linkState = [];
-    renderLinks();
-    syncLinksToEngine();
-    enablePublishIfReady();
-  });
-
-  el.mediaEnabled?.addEventListener("change", () => {
-    if (!hasLoadedState) return;
-    mediaTouched = true;
-    mediaEnabledState = el.mediaEnabled.checked === true;
-    enablePublishIfReady();
-  });
-
-  el.mediaCollectionTitle?.addEventListener("input", () => {
-    if (!hasLoadedState) return;
-    mediaTouched = true;
-    enablePublishIfReady();
-  });
-
-  el.btnAddMedia?.addEventListener("click", () => {
-    if (!hasLoadedState) return;
-
-    const title = (el.mediaTitle?.value || "").trim();
-    const access = (el.mediaAccess?.value === "paid") ? "paid" : "public";
-    const url = (el.mediaUrl?.value || "").trim();
-    const thumb = (el.mediaThumb?.value || "").trim();
-    const desc = (el.mediaDesc?.value || "").trim();
-
-    if (!title) return;
-
-    mediaItems.push({
-      id: `item-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      title,
-      description: desc,
-      thumbnail: thumb,
-      url: access === "paid" ? "" : url,
-      access
-    });
-
-    mediaTouched = true;
-
-    if (el.mediaTitle) el.mediaTitle.value = "";
-    if (el.mediaUrl) el.mediaUrl.value = "";
-    if (el.mediaThumb) el.mediaThumb.value = "";
-    if (el.mediaDesc) el.mediaDesc.value = "";
-
-    renderMediaList();
-    enablePublishIfReady();
-  });
-
-  el.btnClearMedia?.addEventListener("click", () => {
-    if (!hasLoadedState) return;
-    mediaItems = [];
-    mediaTouched = true;
-    renderMediaList();
-    enablePublishIfReady();
-  });
-
-  el.appIconFile?.addEventListener("change", () => {
-    const file = el.appIconFile?.files?.[0];
-    if (!file || !el.appIconPreview) return;
-    const url = URL.createObjectURL(file);
-    el.appIconPreview.src = url;
-    el.appIconPreview.style.display = "block";
-  });
-
-  el.previewFrame?.addEventListener("load", handlePreviewFrameLoad);
-
-  window.addEventListener("message", (event) => {
-    const data = event?.data;
-    if (!data || typeof data !== "object") return;
-
-    if (data.type === "BASE_PREVIEW_READY") {
-      if (el.previewBridgeState) el.previewBridgeState.textContent = "Preview bridge: connected";
-      postPreviewToFrame();
-    }
-  });
-
-  el.btnLoad?.addEventListener("click", async () => {
-    try {
-      setPill("warn", "STATUS: loading…");
-
-      const current = await fetchPublicJson(el.contentUrl.value || DEFAULT_CONTENT_URL);
-
-      if (el.name) el.name.value = current?.name || "";
-      if (el.bio) el.bio.value = current?.bio || "";
-      if (el.backgroundColor) el.backgroundColor.value = current?.backgroundColor || "#000000";
-      if (el.pillColor) el.pillColor.value = current?.pillColor || "#caa300";
-
-      hydrateLinks(current?.links);
-
-      if (el.contactEmail) el.contactEmail.value = current?.contactEmail || "";
-      if (el.contactLabel) el.contactLabel.value = current?.contactLabel || "";
-
-      hydrateMediaGateway(current);
-
-      const token = (el.token?.value || localStorage.getItem(LS_TOKEN) || "").trim();
-      if (token) {
-        try {
-          const meta = await ghGetFileMeta(token, TARGET_PATH);
-          lastRemoteSha = meta.sha;
-          if (el.lastSha) el.lastSha.textContent = `sha: ${lastRemoteSha}`;
-        } catch (shaErr) {
-          lastRemoteSha = null;
-          if (el.lastSha) el.lastSha.textContent = "sha: —";
-          log(`SHA lookup skipped: ${shaErr.message}`);
-        }
-      } else {
-        lastRemoteSha = null;
-        if (el.lastSha) el.lastSha.textContent = "sha: —";
-      }
-
-      hasLoadedState = true;
-      setEditingLocked(false);
-      enablePublishIfReady();
-      setPill("warn", "STATUS: loaded");
-      log("Loaded current state.");
-      postPreviewToFrame();
-
-    } catch (e) {
-      setPill("bad", "STATUS: load failed");
-      log(e.message);
-    }
-  });
-
-  el.btnPublish?.addEventListener("click", async () => {
-    try {
-      const token = requireToken();
-
-      const meta = await ghGetFileMeta(token, TARGET_PATH);
-      lastRemoteSha = meta.sha;
-      if (el.lastSha) el.lastSha.textContent = `sha: ${lastRemoteSha}`;
-
-      let existingObj = {};
-      try {
-        const existingText = fromBase64Utf8(meta.content || "");
-        const parsed = JSON.parse(existingText);
-        if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) existingObj = parsed;
-      } catch (parseErr) {
-        existingObj = {};
-        log(`Warning: existing content.json parse failed, publishing Tier0/media clean. (${parseErr.message})`);
-      }
-
-      const draftTier0 = buildDraftTier0();
-      const merged = mergeTier0IntoExisting(existingObj, draftTier0);
-
-      const mg = buildDraftMediaGatewayIfPresent();
-      if (mg) merged.mediaGateway = mg;
-
-      const jsonText = JSON.stringify(merged, null, 2);
-
-      const result = await ghPutFile(
-        token,
-        TARGET_PATH,
-        lastRemoteSha,
-        toBase64Utf8(jsonText),
-        "BASE V1: publish content.json (merge-safe)"
-      );
-
-      if (result?.content?.sha) {
-        lastRemoteSha = result.content.sha;
-        if (el.lastSha) el.lastSha.textContent = `sha: ${result.content.sha}`;
-      }
-
-      const appName = safeAppNameFromDraft(merged);
-
-      try {
-        const mf = await ghGetFileMeta(token, MANIFEST_PATH);
-        const mfText = fromBase64Utf8(mf.content || "");
-        const mfJson = JSON.parse(mfText);
-
-        ensureManifestIdentity(mfJson, appName);
-
-        await ghPutFile(
-          token,
-          MANIFEST_PATH,
-          mf.sha,
-          toBase64Utf8(JSON.stringify(mfJson, null, 2)),
-          "BASE V1: sync manifest name"
-        );
-
-        const idx = await ghGetFileMeta(token, FAN_INDEX_PATH);
-        const idxText = fromBase64Utf8(idx.content || "");
-
-        const iconHref = getIconSrcFromManifest(mfJson, "192x192");
-        const idxNew = updateFanIndexHtmlIdentity(idxText, appName, iconHref);
-
-        await ghPutFile(
-          token,
-          FAN_INDEX_PATH,
-          idx.sha,
-          toBase64Utf8(idxNew),
-          "BASE V1: sync iOS app title"
-        );
-
-        log("Identity synced (manifest + iOS head).");
-      } catch (idErr) {
-        log(`Identity sync skipped: ${idErr.message}`);
-      }
-
-      setPill("ok", "STATUS: published");
-      log("Publish success (merge-safe).");
-
-    } catch (e) {
-      setPill("bad", "STATUS: publish failed");
-      log(e.message);
-    }
-  });
-
-  el.btnUpdateIcon?.addEventListener("click", async () => {
-    try {
-      const token = requireToken();
-      const file = el.appIconFile?.files?.[0];
-      if (!file) throw new Error("No file selected.");
-
-      if (el.appIconStatus) el.appIconStatus.textContent = "Uploading…";
-
-      const base64Data = await fileToBase64(file);
-
-      const mf = await ghGetFileMeta(token, MANIFEST_PATH);
-      const mfText = fromBase64Utf8(mf.content || "");
-      const mfJson = JSON.parse(mfText);
-
-      const draft = buildDraftTier0();
-      const appName = safeAppNameFromDraft(draft);
-      ensureManifestIdentity(mfJson, appName);
-
-      const nextV = bumpManifestVersionAndIconPaths(mfJson);
-
-      const icon192Src = String(mfJson.icons?.[0]?.src || `icons/icon-192-v${nextV}.png`);
-      const icon512Src = String(mfJson.icons?.[1]?.src || `icons/icon-512-v${nextV}.png`);
-
-      const path192 = `Fan App/${icon192Src}`;
-      const path512 = `Fan App/${icon512Src}`;
-
-      await ghUpsertFile(token, path192, base64Data, `BASE V1: write ${icon192Src}`);
-      await ghUpsertFile(token, path512, base64Data, `BASE V1: write ${icon512Src}`);
-
-      await ghPutFile(
-        token,
-        MANIFEST_PATH,
-        mf.sha,
-        toBase64Utf8(JSON.stringify(mfJson, null, 2)),
-        `BASE V1: bump manifest + identity v=${nextV}`
-      );
-
-      const idx = await ghGetFileMeta(token, FAN_INDEX_PATH);
-      const idxText = fromBase64Utf8(idx.content || "");
-      const idxNew = updateFanIndexHtmlIdentity(idxText, appName, icon192Src);
-
-      await ghPutFile(
-        token,
-        FAN_INDEX_PATH,
-        idx.sha,
-        toBase64Utf8(idxNew),
-        `BASE V1: sync iOS icon+title v=${nextV}`
-      );
-
-      if (el.appIconStatus) el.appIconStatus.textContent = `Icon updated. Version v=${nextV}`;
-      log(`Icon updated + manifest/index synced to v=${nextV}.`);
-
-    } catch (e) {
-      if (el.appIconStatus) el.appIconStatus.textContent = `Error: ${e.message}`;
-      log(e.message);
-    }
-  });
-
-  function init() {
-    if (el.repoLabel) el.repoLabel.textContent = `${OWNER}/${REPO}@${BRANCH}`;
-    if (el.contentUrl) el.contentUrl.value = DEFAULT_CONTENT_URL;
-
-    const saved = localStorage.getItem(LS_TOKEN);
-    if (saved && el.token) el.token.value = saved;
-
-    if (el.backgroundColor) el.backgroundColor.value = "#000000";
-    if (el.pillColor) el.pillColor.value = "#caa300";
-
-    if (el.previewFrame) el.previewFrame.src = PREVIEW_FRAME_SRC;
-
-    hydrateLinks([]);
-    renderMediaList();
-    setEditingLocked(true);
-    refreshPreview();
-    enablePublishIfReady();
-    setPill("warn", "STATUS: ready");
-    if (el.previewBridgeState) el.previewBridgeState.textContent = "Preview bridge: waiting for Fan App hook";
-  }
-
-  init();
-
-})();
+
+const OWNER="soliddreamz"
+const REPO="Base-Creator-Land"
+const BRANCH="main"
+
+const TARGET_PATH="Fan App/content.json"
+
+const DEFAULT_CONTENT_URL=`https://${OWNER}.github.io/${REPO}/Fan%20App/content.json`
+
+const $=id=>document.getElementById(id)
+
+const el={
+token:$("token"),
+contentUrl:$("contentUrl"),
+btnLoad:$("btnLoad"),
+btnPublish:$("btnPublish"),
+btnResetToken:$("btnResetToken"),
+name:$("name"),
+bio:$("bio"),
+backgroundColor:$("backgroundColor"),
+pillColor:$("pillColor"),
+linkLabelInput:$("linkLabelInput"),
+linkUrlInput:$("linkUrlInput"),
+addLinkBtn:$("addLinkBtn"),
+clearLinksBtn:$("clearLinksBtn"),
+linksList:$("linksList"),
+contactEmail:$("contactEmail"),
+contactLabel:$("contactLabel"),
+status:$("status"),
+repoLabel:$("repoLabel"),
+statePill:$("statePill"),
+lastSha:$("lastSha")
+}
+
+const LS_TOKEN="base_creator_token_v1"
+
+let hasLoadedState=false
+let lastRemoteSha=null
+let linkState=[]
+
+function log(t){
+const s=new Date().toLocaleString()
+el.status.textContent=`[${s}] ${t}\n`+el.status.textContent
+}
+
+function setPill(type,text){
+el.statePill.className=`pill ${type}`
+el.statePill.textContent=text
+}
+
+function enablePublishIfReady(){
+const hasToken=(el.token.value||"").trim().length>0
+
+/* FIXED HERE */
+el.btnPublish.disabled=!(hasLoadedState && hasToken)
+}
+
+async function fetchState(){
+
+const url=new URL(el.contentUrl.value||DEFAULT_CONTENT_URL)
+url.searchParams.set("ts",Date.now())
+
+const res=await fetch(url.toString(),{cache:"no-store"})
+return res.json()
+
+}
+
+function renderLinks(){
+el.linksList.innerHTML=""
+
+linkState.forEach((l,i)=>{
+
+const row=document.createElement("div")
+row.className="linkRow"
+
+const text=document.createElement("div")
+text.className="linkText"
+text.textContent=`${l.label} — ${l.url}`
+
+const remove=document.createElement("button")
+remove.textContent="Remove"
+
+remove.onclick=()=>{
+linkState.splice(i,1)
+renderLinks()
+enablePublishIfReady()
+}
+
+row.appendChild(text)
+row.appendChild(remove)
+
+el.linksList.appendChild(row)
+
+})
+
+}
+
+el.addLinkBtn.onclick=()=>{
+const label=(el.linkLabelInput.value||"").trim()
+const url=(el.linkUrlInput.value||"").trim()
+
+if(!url)return
+
+linkState.push({label:label||url,url})
+
+el.linkLabelInput.value=""
+el.linkUrlInput.value=""
+
+renderLinks()
+enablePublishIfReady()
+}
+
+el.clearLinksBtn.onclick=()=>{
+linkState=[]
+renderLinks()
+enablePublishIfReady()
+}
+
+el.btnLoad.onclick=async()=>{
+try{
+
+setPill("warn","STATUS: loading…")
+
+const state=await fetchState()
+
+el.name.value=state.name||""
+el.bio.value=state.bio||""
+el.backgroundColor.value=state.backgroundColor||"#000000"
+el.pillColor.value=state.pillColor||"#caa300"
+linkState=Array.isArray(state.links)?state.links:[]
+
+renderLinks()
+
+hasLoadedState=true
+
+enablePublishIfReady()
+
+setPill("warn","STATUS: loaded")
+
+log("Loaded current state.")
+
+}catch(e){
+
+setPill("bad","STATUS: load failed")
+log(e.message)
+
+}
+}
+
+function ghHeaders(token){
+return{
+Accept:"application/vnd.github+json",
+Authorization:`Bearer ${token}`,
+"X-GitHub-Api-Version":"2022-11-28",
+"Content-Type":"application/json"
+}
+}
+
+function toBase64Utf8(str){
+const utf8=new TextEncoder().encode(str)
+let bin=""
+utf8.forEach(b=>bin+=String.fromCharCode(b))
+return btoa(bin)
+}
+
+function fromBase64Utf8(b64){
+const bytes=Uint8Array.from(atob(b64.replace(/\s/g,"")),c=>c.charCodeAt(0))
+return new TextDecoder().decode(bytes)
+}
+
+async function ghGetFileMeta(token,path){
+
+const api=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path)}?ref=${BRANCH}`
+
+const res=await fetch(api,{headers:ghHeaders(token)})
+
+if(!res.ok)throw new Error(`GitHub GET failed (${res.status})`)
+
+return res.json()
+
+}
+
+async function ghPutFile(token,path,sha,contentBase64,message){
+
+const api=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeURIComponent(path)}`
+
+const body={
+message,
+content:contentBase64,
+branch:BRANCH
+}
+
+if(sha)body.sha=sha
+
+const res=await fetch(api,{
+method:"PUT",
+headers:ghHeaders(token),
+body:JSON.stringify(body)
+})
+
+if(!res.ok)throw new Error(`GitHub PUT failed (${res.status})`)
+
+return res.json()
+
+}
+
+el.btnPublish.onclick=async()=>{
+
+try{
+
+const token=el.token.value.trim()
+
+if(!token)throw new Error("Missing creator key.")
+
+const meta=await ghGetFileMeta(token,TARGET_PATH)
+
+lastRemoteSha=meta.sha
+
+const existing=JSON.parse(fromBase64Utf8(meta.content))
+
+const merged={
+...existing,
+name:el.name.value.trim(),
+bio:el.bio.value.trim(),
+links:linkState,
+backgroundColor:el.backgroundColor.value,
+pillColor:el.pillColor.value
+}
+
+if(el.contactEmail.value.trim())merged.contactEmail=el.contactEmail.value.trim()
+if(el.contactLabel.value.trim())merged.contactLabel=el.contactLabel.value.trim()
+
+const result=await ghPutFile(
+token,
+TARGET_PATH,
+lastRemoteSha,
+toBase64Utf8(JSON.stringify(merged,null,2)),
+"BASE publish"
+)
+
+if(result?.content?.sha){
+el.lastSha.textContent=`sha: ${result.content.sha}`
+}
+
+setPill("ok","STATUS: published")
+log("Publish success.")
+
+}catch(e){
+
+setPill("bad","STATUS: publish failed")
+log(e.message)
+
+}
+
+}
+
+function init(){
+
+el.repoLabel.textContent=`${OWNER}/${REPO}@${BRANCH}`
+el.contentUrl.value=DEFAULT_CONTENT_URL
+
+const saved=localStorage.getItem(LS_TOKEN)
+
+if(saved)el.token.value=saved
+
+enablePublishIfReady()
+
+}
+
+init()
+
 </script>
 
 </body>
