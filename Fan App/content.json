@@ -11,7 +11,7 @@
       "url": "https://youtube.com/"
     }
   ],
-  "backgroundColor": "#7b219f",
+  "backgroundColor": "#da5100",
   "contactEmail": "soliddreamz@gmail.com",
   "contactLabel": "Connect",
   "mediaGateway": {
@@ -56,5 +56,5 @@
       }
     ]
   },
-  "pillColor": "#371a94"
+  "pillColor": "#be38f3"
 }
