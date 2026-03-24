@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "bio": "",
+  "name": "A",
+  "bio": "Hi",
   "links": [
     {
       "label": "Instagram",
@@ -19,7 +19,7 @@
       "url": "https://example.invalid/media/sample.mp4"
     }
   ],
-  "backgroundColor": "#ffffff",
+  "backgroundColor": "#000000",
   "contactEmail": "soliddreamz@gmail.com",
   "contactLabel": "Connect",
   "mediaGateway": {
@@ -64,5 +64,5 @@
       }
     ]
   },
-  "pillColor": "#000000"
+  "pillColor": "#808080"
 }
