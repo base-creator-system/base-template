@@ -26,7 +26,7 @@
     "enabled": true,
     "collections": [
       {
-        "title": "Latest",
+        "title": "first content test",
         "items": [
           {
             "id": "clip-001",
@@ -58,6 +58,14 @@
             "description": "teste",
             "thumbnail": "",
             "url": "https://www.dropbox.com/scl/fi/ddp0qz17rcbo2ia09l6bm/fiya-playing-outside.MOV?rlkey=r381awco6l0k1sgvefhsw3ui6&st=btclvr2t&dl=0",
+            "access": "public"
+          },
+          {
+            "id": "item-1774967081873-ebb912f9dd7578",
+            "title": "real media test",
+            "description": "",
+            "thumbnail": "",
+            "url": "https://customer-sb4ix37adh6j9xvg.cloudflarestorage.com/ad",
             "access": "public"
           }
         ]
