@@ -19,7 +19,7 @@
       "url": "https://example.invalid/media/sample.mp4"
     }
   ],
-  "backgroundColor": "#4e7a27",
+  "backgroundColor": "#b92d5d",
   "contactEmail": "soliddreamz@gmail.com",
   "contactLabel": "Connect",
   "mediaGateway": {
@@ -80,5 +80,5 @@
       }
     ]
   },
-  "pillColor": "#982abc"
+  "pillColor": "#52d6fc"
 }
