@@ -23,7 +23,7 @@ identity, and access are presented — without relying on centralized platforms.
 - Not a marketplace
 - Not a payment processor
 
-BASE does not host or control creator revenue.
+BASE does not host or control creator revenue.  
 It acts as a doorway to tools and systems chosen by the creator.
 
 ---
@@ -43,8 +43,8 @@ BASE provides a foundation where:
 
 BASE consists of:
 
-- Creator Dashboard — used to manage and publish
-- Fan App — the user-facing app experience
+- Creator Dashboard — used to manage and publish  
+- Fan App — the user-facing app experience  
 
 The system is designed to remain flexible and host-agnostic.
 
@@ -52,14 +52,19 @@ The system is designed to remain flexible and host-agnostic.
 
 ## Usage
 
-You are free to:
-- Use the code
-- Modify the system
-- Build your own version
+This system is open source under the MIT License.
 
-You must:
-- Provide attribution to the original author
-- Not use BASE branding or identity without permission
+You are free to:
+- Use the code  
+- Modify the system  
+- Build your own version  
+
+Use of this system is also subject to:
+
+- Terms of Use → ./TERMS_OF_USE.md  
+- Brand Policy → ./BRAND_POLICY.md  
+
+BASE is a system, not a platform.
 
 ---
 
