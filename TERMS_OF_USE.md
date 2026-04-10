@@ -50,66 +50,39 @@ BASE acts only as a framework. You operate everything built with it.
 
 ---
 
-## 5. No Warranty
+## 5. Attribution and Origin
 
-BASE is provided “as is”, without warranty of any kind.
+BASE is an original system created by its founder.
 
-There is no guarantee of:
+You may use, modify, and build on BASE, but you may not:
+- Claim authorship of the BASE System itself
+- Present BASE as a system you originally created
+- Remove or misrepresent the origin of the system in a way that creates confusion about its source
 
-* Functionality
-* Compatibility
-* Security
-* Availability
-
-Use at your own risk.
+Derivative works must be clearly distinguishable from the BASE System.
 
 ---
 
-## 6. Limitation of Liability
+## 6. No Repackaging as a Platform
 
-The creator of BASE is not liable for:
+BASE may not be repackaged, bundled, or presented as a centralized platform, service, or managed network.
 
-* Data loss
-* Service interruption
-* Financial loss
-* Misuse of the system
+You may not:
+- Offer BASE as a hosted service where users depend on your infrastructure
+- Present BASE as a system that you control on behalf of other users
+- Gate access to BASE behind a proprietary platform layer
 
-All outcomes from use of BASE are the sole responsibility of the user.
-
----
-
-## 7. Open Source License
-
-BASE is distributed under the MIT License.
-
-You are free to use, modify, and distribute the code in accordance with that license.
+BASE must remain a user-controlled, independently deployed system.
 
 ---
 
-## 8. Identity and Representation
+## 7. No Warranty
 
-You may use the BASE code freely.
+BASE is provided "as is", without warranty of any kind.
 
-However:
+The creator of BASE is not responsible for:
+- Any damages or losses resulting from use of the system
+- Downtime, data loss, or service interruptions
+- Any third-party services used alongside BASE
 
-* You may not present modified versions as official BASE
-* You may not imply endorsement or ownership of BASE
-* You must maintain clear separation between your project and the BASE system identity
-
----
-
-## 9. Updates
-
-These Terms may be updated to clarify the intended use and structure of BASE.
-
-Continued use of the system constitutes acceptance of any updates.
-
----
-
-## 10. Final Principle
-
-BASE exists to give creators control.
-
-It is your system when you deploy it.
-
-It is not controlled, operated, or managed by anyone else.
+Use of BASE is entirely at your own risk.
