@@ -50,25 +50,58 @@ The system is designed to remain flexible and host-agnostic.
 
 ---
 
+## How It Works
+
+BASE separates the app from its control.
+
+- The Fan App is the user-facing app that you host and share  
+- The Creator Dashboard is a control tool used to update your app  
+
+The Creator Dashboard does not need to be hosted. It can be opened locally in a browser and used from any device.
+
+Connection happens through:
+
+- A public `content.json` URL (your hosted app data)  
+- An access token (permission to update your repository)  
+
+When connected, the dashboard updates your app remotely.
+
+This means:
+
+- Your app can be installed independently  
+- Your control over it is portable  
+- You are not tied to a platform or a specific device  
+
+---
+
 ## Setup
 
-1. Create a GitHub repository
+BASE connects to a repository you control.
 
-2. Upload the "Fan App" folder into your repository
+To use BASE, you will need:
 
-3. Enable GitHub Pages:
-   - Go to Settings → Pages
-   - Set source to "Deploy from branch"
-   - Select the main branch
+- A public `content.json` URL  
+- An access token for your repository  
 
-4. Open the Creator Dashboard (index.html)
+In the Creator Dashboard:
 
-5. Enter:
-   - GitHub Token
-   - Content URL:
-     https://YOUR-USERNAME.github.io/YOUR-REPO/Fan%20App/content.json
+1. Open `creator-Dashboard/index.html`
+2. Enter your access token  
+3. Enter your Content URL  
+4. Click Publish  
 
-6. Click Publish
+---
+
+## Repository Setup (Example: GitHub)
+
+One way to set up your repository is using GitHub:
+
+1. Create a repository  
+2. Upload the "Fan App" folder  
+3. Enable GitHub Pages  
+4. Use your deployed `content.json` URL  
+
+This is a default example. Any hosting setup that provides a public `content.json` URL can be used.
 
 ---
 
@@ -76,16 +109,12 @@ The system is designed to remain flexible and host-agnostic.
 
 BASE is host-agnostic.
 
-The setup above uses GitHub Pages as a default because it is simple and widely available.
+The example above uses GitHub Pages because it is simple and widely available.
 
 However, you may use any hosting provider (such as Netlify or others) as long as:
 
-- Your `content.json` file is publicly accessible via a URL
-- The Creator Dashboard is configured with that URL
-
-In this case:
-- Replace the Content URL with your own hosted URL
-- Use the appropriate access method (API key, token, or deployment method) for your provider
+- Your `content.json` file is publicly accessible via a URL  
+- The Creator Dashboard is configured with that URL  
 
 BASE does not depend on any specific platform or hosting service.
 
