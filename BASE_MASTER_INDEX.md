@@ -1,6 +1,6 @@
 # BASE SYSTEM — MASTER SOURCE INDEX
 
-Owner: William S McClinton
+Owner: William Smith McClinton
 System Name: Base
 Status: Private / Pre-public
 Purpose: Creator-first app system & runtime
