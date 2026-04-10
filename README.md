@@ -50,6 +50,47 @@ The system is designed to remain flexible and host-agnostic.
 
 ---
 
+## Setup
+
+1. Create a GitHub repository
+
+2. Upload the "Fan App" folder into your repository
+
+3. Enable GitHub Pages:
+   - Go to Settings → Pages
+   - Set source to "Deploy from branch"
+   - Select the main branch
+
+4. Open the Creator Dashboard (index.html)
+
+5. Enter:
+   - GitHub Token
+   - Content URL:
+     https://YOUR-USERNAME.github.io/YOUR-REPO/Fan%20App/content.json
+
+6. Click Publish
+
+---
+
+## Hosting Flexibility
+
+BASE is host-agnostic.
+
+The setup above uses GitHub Pages as a default because it is simple and widely available.
+
+However, you may use any hosting provider (such as Netlify or others) as long as:
+
+- Your `content.json` file is publicly accessible via a URL
+- The Creator Dashboard is configured with that URL
+
+In this case:
+- Replace the Content URL with your own hosted URL
+- Use the appropriate access method (API key, token, or deployment method) for your provider
+
+BASE does not depend on any specific platform or hosting service.
+
+---
+
 ## Usage
 
 This system is open source under the MIT License.
@@ -62,7 +103,6 @@ You are free to:
 Use of this system is also subject to:
 
 - Terms of Use → ./TERMS_OF_USE.md  
-- Brand Policy → ./BRAND_POLICY.md  
 
 BASE is a system, not a platform.
 
