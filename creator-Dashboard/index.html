@@ -361,6 +361,18 @@ height:520px;
 </div>
 </div>
 
+<div class="row" style="margin-top:14px;">
+<div class="col">
+<label>Contact Email</label>
+<input id="contactEmail" type="email">
+</div>
+
+<div class="col">
+<label>Button Label</label>
+<input id="contactLabel" type="text">
+</div>
+</div>
+
 <div style="margin-top:14px;">
 <label>Background Color</label>
 <input id="backgroundColor" type="color">
@@ -375,17 +387,6 @@ height:520px;
 <label>App Icon</label>
 <input id="appIconInput" type="file" accept="image/png,image/jpeg">
 </div>
-
-<div style="margin-top:18px;">
-<label>Contact Email</label>
-<input id="contactEmail" type="email">
-</div>
-
-<div style="margin-top:14px;">
-<label>Button Label</label>
-<input id="contactLabel" value="Connect">
-</div>
-
 
 </div>
 
@@ -1167,10 +1168,10 @@ const state=await fetchState()
 
 el.name.value=state.name||""
 el.bio.value=state.bio||""
+el.contactEmail.value=state.contactEmail||""
+el.contactLabel.value=state.contactLabel||""
 el.backgroundColor.value=state.backgroundColor||"#000000"
 el.pillColor.value=state.pillColor||"#caa300"
-el.contactEmail.value=state.contactEmail||""
-el.contactLabel.value=state.contactLabel||"Connect"
 linkState=Array.isArray(state.links)?state.links:[]
 hydrateMediaGateway(state)
 
@@ -1340,11 +1341,11 @@ const merged={
 ...existing,
 name:el.name.value.trim(),
 bio:el.bio.value.trim(),
+contactEmail:el.contactEmail.value.trim(),
+contactLabel:el.contactLabel.value.trim(),
 links:linkState,
 backgroundColor:el.backgroundColor.value,
-pillColor:el.pillColor.value,
-contactEmail:el.contactEmail.value.trim(),
-contactLabel:el.contactLabel.value.trim() || "Connect"
+pillColor:el.pillColor.value
 }
 
 const mg=buildMediaGateway()
@@ -1475,10 +1476,10 @@ refreshPreview()
 
 el.name.addEventListener("input",markDirty)
 el.bio.addEventListener("input",markDirty)
-el.backgroundColor.addEventListener("input",markDirty)
-el.pillColor.addEventListener("input",markDirty)
 el.contactEmail.addEventListener("input",markDirty)
 el.contactLabel.addEventListener("input",markDirty)
+el.backgroundColor.addEventListener("input",markDirty)
+el.pillColor.addEventListener("input",markDirty)
 
 el.mediaEnabled.addEventListener("change",()=>{
 mediaTouched=true
@@ -1505,10 +1506,6 @@ el.token.value=saved
 localStorage.setItem(LS_TOKEN,saved)
 }else{
 localStorage.removeItem(LS_TOKEN)
-}
-
-if(!el.contactLabel.value){
-el.contactLabel.value="Connect"
 }
 
 renderLinks()
