@@ -70,7 +70,7 @@ BASE is a system, not a platform.
 
 ## Author
 
-William S McClinton  
+William Smith McClinton  
 Creator of BASE
 
 ---
