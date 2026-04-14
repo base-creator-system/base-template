@@ -1,6 +1,6 @@
 {
-  "name": "DJ TEST 21",
-  "short_name": "DJ TEST 21",
+  "name": "YOUR APP",
+  "short_name": "APP",
   "start_url": "./?v=1774199498057",
   "display": "standalone",
   "background_color": "#000000",
