@@ -64,11 +64,11 @@ Connection happens through:
 - A public `content.json` URL (your hosted app data)  
 - An access token (permission to update your repository)  
 
-When connected, the dashboard updates your app remotely.
+When connected, the dashboard updates your app’s content (`content.json`) remotely.
 
 This means:
 
-- Your app can be installed independently  
+- Your app can be installed independently of the dashboard  
 - Your control over it is portable  
 - You are not tied to a platform or a specific device  
 
@@ -87,7 +87,7 @@ In the Creator Dashboard:
 
 1. Open `creator-Dashboard/index.html`
 2. Enter your access token  
-3. Enter your Content URL  
+3. Enter your `content.json` URL  
 4. Click Publish  
 
 ---
