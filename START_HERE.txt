@@ -1,0 +1,25 @@
+START HERE
+
+1. Open the folder "creator-Dashboard"
+
+2. Open the file:
+   index.html
+
+3. Follow the instructions inside the dashboard to connect your app
+
+4. If you need more details, open:
+   README.md
+
+---
+
+What this is:
+
+- "Fan App" = your app (what people will see)
+- "creator-Dashboard" = your control panel
+
+You do NOT install anything.
+You do NOT upload anything to start.
+
+Just open the dashboard and follow it.
+
+---
