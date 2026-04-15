@@ -1,84 +1,18 @@
 {
-  "name": "Base stand alone test",
-  "bio": "Base URL 7 DJ More Fire | \"Text & Decks\" | Creator-owned app > platform profile | symbols test: ! @ # $ % ^ & * ( ) _ + = [ ] { } ; : ' \" , < > / ? \\ |",
-  "links": [
-    {
-      "label": "Instagram",
-      "url": "https://instagram.com/"
-    },
-    {
-      "label": "YouTube",
-      "url": "https://youtube.com/"
-    },
-    {
-      "label": "TIKTOK",
-      "url": "https://www.tiktok.com/@djmofiya?_r=1&_t=ZP-94fqH0N1Mfn"
-    },
-    {
-      "label": "Test links",
-      "url": "https://example.invalid/media/sample.mp4"
-    }
-  ],
-  "backgroundColor": "#0056d6",
-  "contactEmail": "soliddreamz@gmail.com",
+  "name": "Your App",
+  "bio": "Edit App From Creator Dashboard",
+  "links": [],
+  "backgroundColor": "#000000",
+  "contactEmail": "",
   "contactLabel": "Connect",
   "mediaGateway": {
     "enabled": true,
     "collections": [
       {
-        "title": "first content test",
-        "items": [
-          {
-            "id": "clip-001",
-            "title": "Text & Decks Clip",
-            "description": "Live performance excerpt.",
-            "thumbnail": "",
-            "url": "https://example.com/sample-video.mp4",
-            "access": "public"
-          },
-          {
-            "id": "set-locked-001",
-            "title": "Full Set (Members)",
-            "description": "Extended live set.",
-            "thumbnail": "",
-            "url": "",
-            "access": "paid"
-          },
-          {
-            "id": "item-1772493897452-705ab9c9a99418",
-            "title": "Base Test Clip",
-            "description": "Testing media gateway pipeline.",
-            "thumbnail": "https://via.placeholder.com/600x400",
-            "url": "https://www.w3schools.com/html/mov_bbb.mp4",
-            "access": "public"
-          },
-          {
-            "id": "item-1772768785723-5e9aa2949dcf2",
-            "title": "testing testing",
-            "description": "teste",
-            "thumbnail": "",
-            "url": "https://www.dropbox.com/scl/fi/ddp0qz17rcbo2ia09l6bm/fiya-playing-outside.MOV?rlkey=r381awco6l0k1sgvefhsw3ui6&st=btclvr2t&dl=0",
-            "access": "public"
-          },
-          {
-            "id": "item-1774967936518-390f2646f5b7c8",
-            "title": "more test",
-            "description": "",
-            "thumbnail": "",
-            "url": "https://iframe.videodelivery.net/ad4dc24bf94a0aa0e8b096613c8b48b7",
-            "access": "public"
-          },
-          {
-            "id": "item-1774973017022-8251e0249dade8",
-            "title": "another test",
-            "description": "",
-            "thumbnail": "",
-            "url": "https://iframe.videodelivery.net/06afe612a42487f89f1c7eaf14c7cec7",
-            "access": "public"
-          }
-        ]
+        "title": "Latest",
+        "items": []
       }
     ]
   },
-  "pillColor": "#f2f7b7"
+  "pillColor": "#fecb3e"
 }
