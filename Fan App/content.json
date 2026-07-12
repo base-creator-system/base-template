@@ -1,10 +1,11 @@
 {
-  "name": "Your App",
-  "bio": "Edit App From Creator Dashboard",
-  "links": [],
-  "backgroundColor": "#000000",
+  "name": "BASE Creator",
+  "bio": "",
   "contactEmail": "",
   "contactLabel": "Connect",
+  "backgroundColor": "#000000",
+  "pillColor": "#000000",
+  "links": [],
   "mediaGateway": {
     "enabled": true,
     "collections": [
@@ -13,6 +14,5 @@
         "items": []
       }
     ]
-  },
-  "pillColor": "#000000"
+  }
 }
