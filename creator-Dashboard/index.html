@@ -528,6 +528,7 @@ src="../Fan App/index.html?basePreviewShell=1">
 
 <div style="display:flex;gap:12px;flex-wrap:wrap;">
 <button id="btnPublish" disabled>Publish</button>
+<button id="btnPrepareCleanTemplate" class="danger" type="button">Prepare Clean Template</button>
 <button id="btnResetToken" class="danger">Reset Key</button>
 </div>
 
@@ -551,7 +552,7 @@ src="../Fan App/index.html?basePreviewShell=1">
 <script>
 
 const OWNER ="base-creator-system"
-const REPO ="Base-Creator-Land"
+const REPO ="base-template"
 const BRANCH="main"
 
 const TARGET_PATH="Fan App/content.json"
@@ -565,6 +566,7 @@ token:$("token"),
 contentUrl:$("contentUrl"),
 btnLoad:$("btnLoad"),
 btnPublish:$("btnPublish"),
+btnPrepareCleanTemplate:$("btnPrepareCleanTemplate"),
 btnResetToken:$("btnResetToken"),
 name:$("name"),
 bio:$("bio"),
@@ -961,6 +963,292 @@ icon512Name:latest512.name
 }
 }
 
+async function ghListDirectory(token,path){
+
+const api=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${ghEncodePath(path)}?ref=${BRANCH}`
+const res=await fetch(api,{headers:ghHeaders(token)})
+
+if(res.status===404){
+return []
+}
+
+if(!res.ok){
+throw new Error(`GitHub directory read failed (${res.status}): ${path}`)
+}
+
+const data=await res.json()
+
+return Array.isArray(data) ? data : []
+
+}
+
+async function ghDeleteFile(token,path,sha,message){
+
+const api=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${ghEncodePath(path)}`
+
+const res=await fetch(api,{
+method:"DELETE",
+headers:ghHeaders(token),
+body:JSON.stringify({
+message,
+sha,
+branch:BRANCH
+})
+})
+
+if(!res.ok){
+throw new Error(`GitHub DELETE failed (${res.status}): ${path}`)
+}
+
+return res.json()
+
+}
+
+async function deleteDirectoryFiles(token,path,keepNames){
+
+const files=await ghListDirectory(token,path)
+const keep=new Set(Array.isArray(keepNames) ? keepNames : [])
+let deleted=0
+
+for(const file of files){
+if(file.type!=="file") continue
+if(keep.has(file.name)) continue
+
+await ghDeleteFile(
+token,
+file.path,
+file.sha,
+`BASE clean template remove ${file.path}`
+)
+
+deleted++
+}
+
+return deleted
+
+}
+
+async function makeBaseTemplateIconBase64(size){
+return new Promise((resolve,reject)=>{
+const canvas=document.createElement("canvas")
+canvas.width=size
+canvas.height=size
+
+const ctx=canvas.getContext("2d")
+if(!ctx){
+reject(new Error("Icon canvas unavailable."))
+return
+}
+
+ctx.fillStyle="#050505"
+ctx.fillRect(0,0,size,size)
+
+const glow=ctx.createRadialGradient(size/2,size/2,size*0.08,size/2,size/2,size*0.46)
+glow.addColorStop(0,"#ffd84d")
+glow.addColorStop(1,"#caa300")
+ctx.fillStyle=glow
+ctx.beginPath()
+ctx.arc(size/2,size/2,size*0.38,0,Math.PI*2)
+ctx.fill()
+
+ctx.fillStyle="#050505"
+ctx.font=`900 ${Math.floor(size*0.18)}px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif`
+ctx.textAlign="center"
+ctx.textBaseline="middle"
+ctx.fillText("BASE",size/2,size/2)
+
+canvas.toBlob(blob=>{
+if(!blob){
+reject(new Error("Icon canvas export failed."))
+return
+}
+const reader=new FileReader()
+reader.onload=()=>resolve(String(reader.result).split(",")[1])
+reader.onerror=reject
+reader.readAsDataURL(blob)
+},"image/png")
+})
+}
+
+function buildCleanTemplateContent(){
+
+return{
+name:"BASE Creator",
+bio:"",
+contactEmail:"",
+contactLabel:"Connect",
+backgroundColor:"#000000",
+pillColor:"#000000",
+links:[],
+mediaGateway:{
+enabled:true,
+collections:[{title:"Latest",items:[]}]
+}
+}
+
+}
+
+async function prepareCleanTemplate(token){
+
+log("Clean template preparation started.")
+
+const latest=await getLatestIconVersion(token)
+
+const v192Match=latest.icon192Name.match(/v(\d+)\.png$/)
+const v512Match=latest.icon512Name.match(/v(\d+)\.png$/)
+
+if(!v192Match || !v512Match){
+throw new Error("Could not parse current icon version.")
+}
+
+const newVersion=Math.max(
+parseInt(v192Match[1],10),
+parseInt(v512Match[1],10)
+)+1
+
+const icon192Name=`icon-192-v${newVersion}.png`
+const icon512Name=`icon-512-v${newVersion}.png`
+
+const base192=await makeBaseTemplateIconBase64(192)
+const base512=await makeBaseTemplateIconBase64(512)
+
+await ghPutFile(
+token,
+`Fan App/icons/${icon192Name}`,
+undefined,
+base192,
+`BASE clean template icon v${newVersion} (192)`
+)
+
+await ghPutFile(
+token,
+`Fan App/icons/${icon512Name}`,
+undefined,
+base512,
+`BASE clean template icon v${newVersion} (512)`
+)
+
+log(`Clean BASE icons created: ${icon192Name}, ${icon512Name}`)
+
+const deletedIcons=await deleteDirectoryFiles(token,"Fan App/icons",[icon192Name,icon512Name])
+log(`Fan App/icons cleaned. Removed ${deletedIcons} old icon file(s).`)
+
+const manifestPath="Fan App/manifest.json"
+const manifestMeta=await ghGetFileMeta(token,manifestPath)
+
+let manifest={}
+try{
+manifest=JSON.parse(fromBase64Utf8(manifestMeta.content))
+}catch(e){
+manifest={}
+}
+
+manifest.name="BASE Creator"
+manifest.short_name="BASE"
+manifest.icons=[
+{
+src:`icons/${icon192Name}`,
+sizes:"192x192",
+type:"image/png"
+},
+{
+src:`icons/${icon512Name}`,
+sizes:"512x512",
+type:"image/png"
+}
+]
+
+await ghPutFile(
+token,
+manifestPath,
+manifestMeta.sha,
+toBase64Utf8(JSON.stringify(manifest,null,2)),
+`BASE clean template manifest v${newVersion}`
+)
+
+const cleanContent=buildCleanTemplateContent()
+const contentMeta=await ghGetFileMeta(token,TARGET_PATH)
+
+const result=await ghPutFile(
+token,
+TARGET_PATH,
+contentMeta.sha,
+toBase64Utf8(JSON.stringify(cleanContent,null,2)),
+"BASE clean template content reset"
+)
+
+const fanIndexPath="Fan App/index.html"
+const fanIndexMeta=await ghGetFileMeta(token,fanIndexPath)
+let fanIndexHtml=fromBase64Utf8(fanIndexMeta.content)
+const cacheVersion=Date.now()
+
+fanIndexHtml=fanIndexHtml.replace(
+/<title>.*?<\/title>/,
+`<title>BASE Creator</title>`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<meta name="apple-mobile-web-app-title" content=".*?">/g,
+`<meta name="apple-mobile-web-app-title" content="BASE Creator">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<meta name="application-name" content=".*?">/g,
+`<meta name="application-name" content="BASE Creator">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<link rel="manifest" href="manifest\.json(?:\?v=\d+)?">/g,
+`<link rel="manifest" href="manifest.json?v=${cacheVersion}">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<link rel="apple-touch-icon"[^>]*>/g,
+`<link rel="apple-touch-icon" sizes="512x512" href="icons/${icon512Name}?v=${cacheVersion}">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<link rel="shortcut icon"[^>]*>/g,
+`<link rel="shortcut icon" type="image/png" href="icons/${icon192Name}?v=${cacheVersion}">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<link rel="icon"[^>]*>/g,
+`<link rel="icon" type="image/png" sizes="192x192" href="icons/${icon192Name}?v=${cacheVersion}">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<img id="logo" src="icons\/[^"]+">/g,
+`<img id="logo" src="icons/${icon192Name}?v=${cacheVersion}">`
+)
+
+fanIndexHtml=fanIndexHtml.replace(
+/<img id="heroImg" src="icons\/[^"]+">/g,
+`<img id="heroImg" src="icons/${icon512Name}?v=${cacheVersion}">`
+)
+
+await ghPutFile(
+token,
+fanIndexPath,
+fanIndexMeta.sha,
+toBase64Utf8(fanIndexHtml),
+"BASE clean template HTML sync"
+)
+
+if(result?.content?.sha){
+loadedSha=result.content.sha
+shaConflict=false
+el.lastSha.textContent=`sha: ${result.content.sha}`
+}
+
+return{
+icon192Name,
+icon512Name,
+deletedIcons
+}
+
+}
+
 async function updateAppIcon(){
 
 try{
@@ -1156,6 +1444,64 @@ mediaItems=[]
 mediaTouched=true
 renderMediaList()
 markDirty()
+}
+
+el.btnPrepareCleanTemplate.onclick=async()=>{
+
+if(isPublishing){
+log("Clean template blocked: publish already in progress.")
+return
+}
+
+const token=(el.token.value||"").trim()
+
+if(!token){
+setPill("bad","STATUS: token required")
+log("Clean template blocked: missing creator key.")
+return
+}
+
+const confirmClean=window.confirm(
+"Prepare clean BASE template?\n\nThis will remove old icons from Fan App/icons, reset content.json, and keep only fresh BASE template icons."
+)
+
+if(!confirmClean){
+log("Clean template cancelled.")
+return
+}
+
+try{
+
+setPublishBusy(true)
+setPill("warn","STATUS: cleaning template…")
+
+const result=await prepareCleanTemplate(token)
+
+el.appIconInput.value=""
+
+linkState=[]
+mediaItems=[]
+mediaHydrated=true
+mediaTouched=false
+
+renderLinks()
+renderMediaList()
+
+clearDirty()
+setPill("ok","STATUS: clean template ready")
+log(`Clean template ready. Old icons removed: ${result.deletedIcons}.`)
+
+}catch(e){
+
+setPill("bad","STATUS: clean failed")
+log(e.message)
+
+}finally{
+
+setPublishBusy(false)
+
+}
+
 }
 
 el.btnLoad.onclick=async()=>{
