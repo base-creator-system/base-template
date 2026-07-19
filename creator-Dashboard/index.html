@@ -558,6 +558,7 @@ const BRANCH="main"
 const TARGET_PATH="Fan App/content.json"
 const DEFAULT_CONTENT_URL=""
 const LS_TOKEN="base_creator_token_v1"
+const LS_CONTENT_URL="base_creator_content_url_v1"
 
 const $=id=>document.getElementById(id)
 
@@ -1493,6 +1494,7 @@ clearDirty()
 await syncLoadedSha()
 
 setPill("warn","STATUS: loaded")
+localStorage.setItem(LS_CONTENT_URL,(el.contentUrl.value||"").trim())
 log("Loaded current state.")
 
 }catch(e){
@@ -1809,7 +1811,8 @@ refreshPreview()
 function init(){
 
 el.repoLabel.textContent=`${OWNER}/${REPO}@${BRANCH}`
-el.contentUrl.value=DEFAULT_CONTENT_URL
+const savedContentUrl=(localStorage.getItem(LS_CONTENT_URL)||"").trim()
+el.contentUrl.value=savedContentUrl||DEFAULT_CONTENT_URL
 
 const saved=(localStorage.getItem(LS_TOKEN)||"").trim()
 if(saved){
