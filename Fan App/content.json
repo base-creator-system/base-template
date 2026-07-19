@@ -4,7 +4,7 @@
   "contactEmail": "",
   "contactLabel": "email",
   "backgroundColor": "#000000",
-  "pillColor": "#000000",
+  "pillColor": "#b51a00",
   "links": [],
   "mediaGateway": {
     "enabled": true,
