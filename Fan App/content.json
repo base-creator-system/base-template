@@ -1,10 +1,10 @@
 {
   "name": "BASE Creator",
   "bio": "",
-  "contactEmail": "soliddreamz@gmail.com",
+  "contactEmail": "",
   "contactLabel": "email",
-  "backgroundColor": "#b51a00",
-  "pillColor": "#fffc41",
+  "backgroundColor": "#000000",
+  "pillColor": "#000000",
   "links": [],
   "mediaGateway": {
     "enabled": true,
