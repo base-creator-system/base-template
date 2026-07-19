@@ -1,4 +1,5 @@
 # BASE — Your App System
+
 This is your creator app system.
 
 To use it:
@@ -11,19 +12,25 @@ To use it:
    → Keep it private; anyone with this key can edit your repository
 
 2. Open the Creator Dashboard
-   → go to: /creator-Dashboard/index.html
+   → Go to: /creator-Dashboard/index.html
 
 3. Enter your Creator Key
 
-4. Connect your content.json URL
+4. Enter your content.json URL
+   → The first time you use the Creator Dashboard, this field will be blank.
+   → After you load your app once, the dashboard will remember this URL on this device.
 
 5. Click "Load Current State"
 
 6. Edit and Publish your app
+
 ---
+
 ⚠️ Note:
 The Fan App will not display correctly if opened directly from this folder.
-It must be published (GitHub Pages or hosting) to fully work.
+It must be published (GitHub Pages or other hosting) to fully work.
+
 ---
+
 Start here:
 → creator-Dashboard/index.html
