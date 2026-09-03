@@ -140,17 +140,21 @@ BASE does not depend on any specific platform or hosting service for the public 
 
 ## Usage
 
-This system is open source under the MIT License.
+The BASE source code is publicly available under the BASE Software License.
 
-You are free to:
+You may:
 
 - Use the code
 - Modify the system
 - Build your own version
+- Build independent applications and systems from the code
 
-Use of this system is also subject to:
+Use and distribution are subject to:
 
+- BASE Software License → ./LICENSE
 - Terms of Use → ./TERMS_OF_USE.md
+
+The BASE name, branding, identity, and original system remain distinct from derivative works built from the source code.
 
 BASE is a system, not a platform.
 
