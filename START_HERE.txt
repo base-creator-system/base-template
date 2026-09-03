@@ -16,13 +16,17 @@ To use it:
 
 3. Enter your Creator Key
 
-4. Enter your content.json URL
+4. Enter your Repository
+   → Use this format: owner/repository
+   → Example: base-creator-system/base-template
+
+5. Enter your content.json URL
    → The first time you use the Creator Dashboard, this field will be blank.
    → After you load your app once, the dashboard will remember this URL on this device.
 
-5. Click "Load Current State"
+6. Click "Load Current State"
 
-6. Edit and Publish your app
+7. Edit and Publish your app
 
 ---
 
