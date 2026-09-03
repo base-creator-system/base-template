@@ -334,6 +334,11 @@ height:520px;
 </div>
 
 <div class="col">
+<label>Repository</label>
+<input id="repository" type="text" placeholder="owner/repository">
+</div>
+
+<div class="col">
 <label>content.json URL</label>
 <input id="contentUrl">
 </div>
@@ -551,19 +556,21 @@ src="../Fan App/index.html?basePreviewShell=1">
 
 <script>
 
-const OWNER = window.location.hostname.split(".")[0]
-const REPO = window.location.pathname.split("/").filter(Boolean)[0]
+let OWNER=""
+let REPO=""
 const BRANCH="main"
 
 const TARGET_PATH="Fan App/content.json"
 const DEFAULT_CONTENT_URL=""
 const LS_TOKEN="base_creator_token_v1"
+const LS_REPOSITORY="base_creator_repository_v1"
 const LS_CONTENT_URL="base_creator_content_url_v1"
 
 const $=id=>document.getElementById(id)
 
 const el={
 token:$("token"),
+repository:$("repository"),
 contentUrl:$("contentUrl"),
 btnLoad:$("btnLoad"),
 btnPublish:$("btnPublish"),
@@ -681,6 +688,30 @@ loadedSha=null
 shaConflict=false
 el.lastSha.textContent="sha: —"
 enablePublishIfReady()
+}
+
+function applyRepository(){
+
+const repository=(el.repository.value||"").trim()
+
+if(!repository){
+OWNER=""
+REPO=""
+el.repoLabel.textContent=`—@${BRANCH}`
+throw new Error("Repository is required. Enter owner/repository.")
+}
+
+const parts=repository.split("/")
+
+if(parts.length!==2 || !parts[0].trim() || !parts[1].trim()){
+throw new Error("Repository must use owner/repository.")
+}
+
+OWNER=parts[0].trim()
+REPO=parts[1].trim()
+el.repoLabel.textContent=`${OWNER}/${REPO}@${BRANCH}`
+
+return repository
 }
 
 async function syncLoadedSha(){
@@ -1474,6 +1505,8 @@ el.btnLoad.onclick=async()=>{
 
 try{
 
+applyRepository()
+
 setPill("warn","STATUS: loading…")
 
 const state=await fetchState()
@@ -1759,6 +1792,22 @@ setPublishBusy(false)
 
 }
 
+el.repository.addEventListener("input",()=>{
+
+const repository=(el.repository.value||"").trim()
+
+if(repository){
+localStorage.setItem(LS_REPOSITORY,repository)
+}else{
+localStorage.removeItem(LS_REPOSITORY)
+OWNER=""
+REPO=""
+el.repoLabel.textContent=`—@${BRANCH}`
+clearShaState()
+}
+
+})
+
 el.token.addEventListener("input",async()=>{
 const t=(el.token.value||"").trim()
 
@@ -1810,7 +1859,26 @@ refreshPreview()
 
 function init(){
 
+const savedRepository=(localStorage.getItem(LS_REPOSITORY)||"").trim()
+el.repository.value=savedRepository
+
+if(savedRepository){
+const parts=savedRepository.split("/")
+if(parts.length===2 && parts[0].trim() && parts[1].trim()){
+OWNER=parts[0].trim()
+REPO=parts[1].trim()
 el.repoLabel.textContent=`${OWNER}/${REPO}@${BRANCH}`
+}else{
+OWNER=""
+REPO=""
+el.repoLabel.textContent=`—@${BRANCH}`
+}
+}else{
+OWNER=""
+REPO=""
+el.repoLabel.textContent=`—@${BRANCH}`
+}
+
 const savedContentUrl=(localStorage.getItem(LS_CONTENT_URL)||"").trim()
 el.contentUrl.value=savedContentUrl||DEFAULT_CONTENT_URL
 
